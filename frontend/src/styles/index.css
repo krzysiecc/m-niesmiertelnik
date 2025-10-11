@@ -87,6 +87,7 @@
     --text-primary: var(--color-blue-100);
     --text-secondary: var(--color-gray-300);
     --text-inverted: var(--color-white-700);
+    --text-on-accent: var(--color-white-900); 
 
     --accent-primary: var(--color-red-400);
     --accent-primary-hover: var(--color-light-red-600);
@@ -111,6 +112,7 @@
     --text-primary: var(--color-white-800);
     --text-secondary: var(--color-white-500);
     --text-inverted: var(--color-blue-400);
+    --text-on-accent: var(--color-white-900); 
 
     --accent-primary: var(--color-red-600);
     --accent-primary-hover: var(--color-light-red-500);
@@ -187,6 +189,7 @@
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-inverted: var(--text-inverted);
+  --color-text-on-accent: var(--text-on-accent);
 
   --color-accent-primary: var(--accent-primary);
   --color-accent-primary-hover: var(--accent-primary-hover);

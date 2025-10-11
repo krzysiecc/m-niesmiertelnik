@@ -73,7 +73,9 @@ export default function Register() {
             <Input label="Hasło" type="password" name="password" placeholder="••••••••" value={formData.password} onChange={handleChange} required />
             <Input label="Potwierdź hasło" type="password" name="confirmPassword" placeholder="••••••••" value={formData.confirmPassword} onChange={handleChange} required />
             
-            <button type="submit" className="w-full px-4 py-3 bg-accent-primary hover:bg-accent-primary-hover text-text-inverted font-bold rounded-lg transition-transform hover:scale-105">
+            <button
+              type="submit"
+              className="w-full px-4 py-3 bg-accent-primary hover:bg-accent-primary-hover text-on-accent font-bold rounded-lg transition-transform hover:scale-105 cursor-pointer">
               Zarejestruj się
             </button>
           </form>

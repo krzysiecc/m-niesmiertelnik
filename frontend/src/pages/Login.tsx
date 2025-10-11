@@ -1,10 +1,11 @@
 // src/pages/Login.tsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Input } from '../components/forms/input';
 
 export default function Login() {
+  const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -14,25 +15,36 @@ export default function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Submitting to /api/login with JSON:", JSON.stringify(formData, null, 2));
+    console.log("Simulating login and redirecting to dashboard. Data:", JSON.stringify(formData, null, 2));
 
-    // --- UNCOMMENT TO SEND TO API ---
-    // try {
-    //   const response = await fetch('/api/login', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(formData),
-    //   });
-    //   const result = await response.json();
-    //   // Handle success (e.g., redirect to dashboard, save token)
-    //   console.log('Success:', result);
-    // } catch (error) {
-    //   // Handle error (e.g., show error message)
-    //   console.error('Error:', error);
-    // }
+    // Immediately navigate to the dashboard, skipping the API call
+    navigate('/dashboard');
+
+    // The actual API call remains commented out for future use
+    /*
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      console.log("Submitting to /api/login with JSON:", JSON.stringify(formData, null, 2));
+
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+        const result = await response.json();
+        console.log('Success:', result);
+        // On success, you would navigate here
+        // navigate('/dashboard'); 
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+    */
   };
+
   
   const handleEpuapLogin = () => {
     alert("Logowanie przez ePUAP nie jest jeszcze zaimplementowane.");
@@ -81,7 +93,7 @@ export default function Login() {
             />
             <button
               type="submit"
-              className="w-full px-4 py-3 bg-accent-primary hover:bg-accent-primary-hover text-text-inverted font-bold rounded-lg transition-transform hover:scale-105 cursor-pointer"
+              className="w-full px-4 py-3 bg-accent-primary hover:bg-accent-primary-hover text-on-accent font-bold rounded-lg transition-transform hover:scale-105 cursor-pointer"
             >
               Zaloguj się
             </button>

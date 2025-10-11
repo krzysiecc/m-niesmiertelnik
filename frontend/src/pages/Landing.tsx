@@ -8,7 +8,7 @@ import { ThemeSwitcher } from '../components/ThemeSwitcher';
 
 export default function Landing() {
   // Button style definitions
-  const primaryBtnClasses = "w-full sm:w-auto text-center px-8 py-4 bg-accent-primary hover:bg-accent-primary-hover rounded-lg text-text-inverted font-semibold shadow-[0_5px_20px_var(--shadow-color)] transition-all duration-300 transform hover:scale-105";
+  const primaryBtnClasses = "w-full sm:w-auto text-center px-8 py-4 bg-accent-primary hover:bg-accent-primary-hover rounded-lg text-on-accent font-semibold shadow-[0_5px_20px_var(--shadow-color)] transition-all duration-300 transform hover:scale-105";
   const secondaryBtnClasses = "w-full sm:w-auto text-center px-8 py-4 bg-transparent border-2 border-accent-primary text-accent-primary hover:bg-accent-primary hover:text-text-inverted rounded-lg font-semibold transition-all duration-300 transform hover:scale-105";
   
   const lines = [
