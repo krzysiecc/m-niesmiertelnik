@@ -151,8 +151,8 @@
   /* However, the semantic mapping above is usually sufficient. */
 
   /* Fonts */
-  --font-family-roboto: "Roboto", "sans-serif";
-  --font-family-monospace: "Monospace";
+  --font-roboto: "Roboto", "sans-serif";
+  --font-monospace: "Monospace";
 }
 
 /* --- BASE BODY STYLES --- */
