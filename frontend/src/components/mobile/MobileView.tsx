@@ -22,10 +22,6 @@ interface CollapsibleSectionProps {
   title: string;
   children: React.ReactNode;
 }
-interface CollapsibleSectionProps {
-  title: string;
-  children: React.ReactNode;
-}
 // Komponent dla rozwijanej sekcji (Akordeon)
 const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -66,15 +62,16 @@ const MobileView = () => {
     name: "Jan Kowalski",
     age: 26,
     gender: "M",
-    chronicDiseases: ["Astma", "Cukrzyca typu 1", "Nadciśnienie tętnicze"],
-    permanentMedications: ["Insulina", "Salbutamol", "Metformina"],
-	allergies: ["Penicylina", "Orzeszki ziemne"]
+    bloodType: "A+",
+    chronicDiseases: ["Astma", "Cukrzyca typu 1"],
+    permanentMedications: ["Insulina", "Salbutamol"],
+	  allergies: ["Penicylina", "Orzeszki ziemne"]
   };
 
   return (
 	<>
 		<MobileNavbar />
-		<div className="bg-gray-800 min-h-screen text-gray-900 p-5 pt-10 font-family-roboto">
+		<div className=" min-h-screen text-gray-900 p-5 pt-10 font-family-roboto">
       	<div className="max-w-md mx-auto">
 
         
@@ -87,7 +84,11 @@ const MobileView = () => {
   {`${person.age} ${[2, 3, 4].includes(person.age % 10) && ![12, 13, 14].includes(person.age % 100) ? 'lata' : 'lat'}`}
 </div>
             <div className="bg-red-500 text-sm font-bold p-2 rounded-lg">{person.gender}</div>
-            <div className="flex-1 text-lg font-medium text-white-500 border-b border-gray-500 pb-1 uppercase text-center">{person.name} <MdBloodtype/></div>
+            <div className="flex flex-1 items-center justify-between text-lg font-medium text-white border-b border-gray-500 pb-1 uppercase">
+              <span className="flex-1 text-center">{person.name}</span>
+              <MdBloodtype className="text-red-500 text-3xl " />
+              <span>{person.bloodType}</span>
+            </div>
           </div>
         </div>
         

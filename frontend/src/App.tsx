@@ -4,6 +4,7 @@ import { useSmoothScroll } from "./hooks/useSmoothScroll";
 
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
+import Mobile from "./components/mobile/MobileView";
 
 import { BasicLayout } from "./components/layout/BasicLayout";
 
@@ -35,7 +36,9 @@ function App() {
         <Route path="/dashboard/products" element={<PlaceholderPage title="Produkty" />} />
         <Route path="/dashboard/products/nfc" element={<PlaceholderPage title="Opaska ratunkowa NFC" />} />
         <Route path="/dashboard/settings" element={<PlaceholderPage title="Ustawienia" />} />
+        
       </Route>
+      <Route path="/mobile/scan" element={<Mobile/>} />
     </Routes>
   );
 }
