@@ -1,27 +1,33 @@
+# main.py
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app import crud, schemas, models
-from app.database import engine, get_db
+from database import Base, engine, get_db
+import crud, models, schemas
+
+
+# tworzymy bazę i tabelę
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Tworzymy tabele (jeśli jeszcze nie istnieją)
-models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "Serwer działa!"}
 
 
-@app.post("/register")
+@app.post("/register", response_model=schemas.UserResponse)
 def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    # Sprawdź, czy użytkownik o danym loginie już istnieje
-    existing_user = crud.get_user_by_login(db, user.login)
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Login already taken")
+    db_user = crud.get_user_by_login(db, user.login)
+    if db_user:
+        raise HTTPException(status_code=400, detail="User already exists")
+    return crud.create_user(db, user)
 
-    # Utwórz nowego użytkownika
-    new_user = crud.create_user(
-        db=db,
-        login=user.login,
-        password=user.password,
-        first_name=user.first_name,
-        last_name=user.last_name,
-    )
-    return {"message": "User created successfully", "user_id": new_user.id}
+@app.get("/users/{login}", response_model=schemas.UserResponse)
+def read_user(login: str, db: Session = Depends(get_db)):
+    db_user = crud.get_user_by_login(db, login)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_user

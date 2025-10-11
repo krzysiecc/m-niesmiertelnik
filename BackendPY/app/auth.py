@@ -1,20 +1,28 @@
 from passlib.context import CryptContext
+from datetime import datetime, timedelta
+import jwt
 
-# bcrypt to bezpieczny algorytm haszowania
+SECRET_KEY = "twoj_super_secret_key"
+ALGORITHM = "HS256"
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-
 def hash_password(password: str) -> str:
-    """
-    Zwraca zahashowane hasło (bcrypt ma limit 72 bajtów, więc obcinamy).
-    """
-    password = password[:72]
-    return pwd_context.hash(password)
+    # truncate to 72 characters (bcrypt limit)
+    return pwd_context.hash(password[:72])
 
+def verify_password(plain_password, hashed_password) -> bool:
+    return pwd_context.verify(plain_password[:72], hashed_password)
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """
-    Sprawdza zgodność hasła z hashem.
-    """
-    plain_password = plain_password[:72]
-    return pwd_context.verify(plain_password, hashed_password)
+def create_jwt(user_id: int) -> str:
+    expire = datetime.utcnow() + timedelta(hours=12)
+    payload = {"user_id": user_id, "exp": expire}
+    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+
+def decode_jwt(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None

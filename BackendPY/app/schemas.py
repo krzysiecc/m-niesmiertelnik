@@ -1,8 +1,19 @@
-from pydantic import BaseModel, constr
-
+# schemas.py
+from pydantic import BaseModel
+from typing import Optional
 
 class UserCreate(BaseModel):
     login: str
-    password: constr(max_length=72)  # ograniczenie zgodne z bcrypt
     first_name: str
     last_name: str
+    allergies: Optional[str] = None
+    chronic_conditions: Optional[str] = None
+
+class UserResponse(BaseModel):
+    first_name: str
+    last_name: str
+    allergies: Optional[str] = None
+    chronic_conditions: Optional[str] = None
+
+    class Config:
+        from_attributes = True  # Pydantic v2
