@@ -63,3 +63,16 @@
   --font-family-roboto: "Roboto", "sans-serif";
   --font-family-monospace: "Monospace";
 }
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48;
+  font-size: 1em; /* bardzo ważne */
+  line-height: 1;
+  display: inline-block;
+  vertical-align: middle;
+}
+

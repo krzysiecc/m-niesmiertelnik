@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-
+import MobileNavbar from './MobileNavbar';
 // Ikona strzałki (Chevron) dla rozwijanych sekcji
 const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
   <svg
@@ -24,7 +24,7 @@ interface CollapsibleSectionProps {
 
 // Komponent dla rozwijanej sekcji (Akordeon)
 const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, children }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
@@ -47,39 +47,34 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, children
 
 // Główny komponent widoku
 const MobileView = () => {
+
   // Przykładowe dane
   const person = {
     name: "Jan Kowalski",
-    age: 21,
+    age: 26,
     gender: "M",
     chronicDiseases: ["Astma", "Cukrzyca typu 1", "Nadciśnienie tętnicze"],
     permanentMedications: ["Insulina", "Salbutamol", "Metformina"],
+	allergies: ["Penicylina", "Orzechy", "Lateks"]
   };
 
   return (
-    <div className="bg-gray-900 min-h-screen font-sans text-white p-4">
+	<>
+		<MobileNavbar />
+		<div className="bg-gray-800 min-h-screen text-gray-900 p-5 pt-10 font-family-roboto">
       <div className="max-w-md mx-auto">
-        {/* === Status Bar (imitacja) === */}
-       
 
-        {/* === Główne Przyciski === */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <button className="bg-red-600/90 hover:bg-red-700 p-4 rounded-xl text-center font-bold">
-            POWIADOM NAJBLIŻSZE OSOBY
-          </button>
-          <button className="bg-blue-600/90 hover:bg-blue-700 p-4 rounded-xl text-center font-bold">
-            POWIADOM 112
-            <span className="block text-xs font-normal text-blue-200">(w tle)</span>
-          </button>
-        </div>
+        
 
         {/* === Informacje o Osobie === */}
-        <div className="mb-6 p-4 bg-gray-800 rounded-xl border border-gray-700">
-          <h2 className="text-sm font-semibold text-gray-400 mb-3">INFORMACJE O OSOBIE</h2>
+        <div className="mb-6 p-4 bg-blue-500 rounded-xl border border-gray-500">
+          <h2 className="text-m font-semibold text-white-500 mb-3">INFORMACJE O OSOBIE</h2>
           <div className="flex items-center gap-4">
-            <div className="bg-indigo-500 text-sm font-bold p-2 rounded-lg">{person.age} lat</div>
-            <div className="bg-indigo-500 text-sm font-bold p-2 rounded-lg">{person.gender}</div>
-            <div className="flex-1 text-lg font-medium text-gray-200 border-b border-gray-600 pb-1">{person.name}</div>
+            <div className="bg-red-500 text-sm font-bold p-2 rounded-lg">
+  {`${person.age} ${[2, 3, 4].includes(person.age % 10) && ![12, 13, 14].includes(person.age % 100) ? 'lata' : 'lat'}`}
+</div>
+            <div className="bg-red-500 text-sm font-bold p-2 rounded-lg">{person.gender}</div>
+            <div className="flex-1 text-lg font-medium text-white-500 border-b border-gray-500 pb-1 uppercase text-center">{person.name}</div>
           </div>
         </div>
         
@@ -96,9 +91,33 @@ const MobileView = () => {
                     {person.permanentMedications.map((med) => <li key={med}>{med}</li>)}
                 </ul>
             </CollapsibleSection>
+
+			<CollapsibleSection title="ALERGIE">
+                <ul className="list-disc list-inside space-y-2">
+                    {person.permanentMedications.map((allergies) => <li key={allergies}>{allergies}</li>)}
+                </ul>
+            </CollapsibleSection>
         </div>
+
+		{/* === Główne Przyciski === */}
+		<div className="p-5 fixed inset-x-0 bottom-0 flex justify-center">
+
+        <div className="grid grid-cols-2 gap-4 pb-20">
+          <button className="bg-green-700 active:bg-green-600 active:transition-colors p-5 border-green-800 border-1 rounded-xl text-center font-extrabold text-[18px]">
+            POWIADOM NAJBLIŻSZE OSOBY
+          </button>
+          <button className="bg-red-500 active:bg-light-red-500 active:transition-colors p-5 border-light-red-400 border-1 rounded-xl text-center font-semibold text-[30px]">
+		    <span className="material-symbols-outlined !text-[38px] mr-2">
+			phone_in_talk
+			</span>
+			112
+          </button>
+        </div>
+		</div>
       </div>
     </div>
+	</>
+    
   );
 };
 
