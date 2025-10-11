@@ -7,6 +7,8 @@ import Dashboard from "./pages/Dashboard";
 import Mobile from "./components/mobile/MobileView";
 
 import { BasicLayout } from "./components/layout/BasicLayout";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 // Placeholder component for other pages
 const PlaceholderPage = ({ title }) => (
@@ -23,7 +25,9 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
-
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      
       <Route element={<BasicLayout />}>
         {/* Redirect /dashboard to the main dashboard view */}
         <Route path="/dashboard" element={<Navigate to="/dashboard/basic" replace />} />
