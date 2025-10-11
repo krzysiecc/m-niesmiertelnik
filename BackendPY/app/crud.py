@@ -1,25 +1,17 @@
-# crud.py
 from sqlalchemy.orm import Session
-from .models import User
-from .schemas import UserCreate
+from app import models, schemas
 
-
-from . import models, schemas, security
-
-def create_user(db, user: schemas.UserCreate):
-    hashed_pw = security.get_password_hash(user.password)
+def create_user(db: Session, user: schemas.UserCreate, hashed_password: str):
     db_user = models.User(
         login=user.login,
+        hashed_password=hashed_password,
         first_name=user.first_name,
-        last_name=user.last_name,
-        hashed_password=hashed_pw
+        last_name=user.last_name
     )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
     return db_user
 
-
-
 def get_user_by_login(db: Session, login: str):
-    return db.query(User).filter(User.login == login).first()
+    return db.query(models.User).filter(models.User.login == login).first()
