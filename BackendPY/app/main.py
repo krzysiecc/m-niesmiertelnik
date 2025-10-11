@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from app import crud, schemas
 from app.database import Base, engine, get_db
 from app.security import get_password_hash, verify_password
+from fastapi.middleware.cors import CORSMiddleware
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -37,3 +39,18 @@ def read_user(login: str, db: Session = Depends(get_db)):
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
+
+
+origins = [
+    "http://localhost:3000",  # Twój front w React podczas dev
+    "http://127.0.0.1:3000",  # alternatywne localhost
+    # możesz dodać też produkcyjne domeny np. "https://myfrontend.com"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,      # zezwól na dostęp tylko z tych adresów
+    allow_credentials=True,     # czy wysyłać ciasteczka / auth headers
+    allow_methods=["*"],        # GET, POST, PUT, DELETE, itd.
+    allow_headers=["*"],        # wszystkie nagłówki
+)
