@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import MobileNavbar from './MobileNavbar';
+import { MdBloodtype } from "react-icons/md";
 // Ikona strzałki (Chevron) dla rozwijanych sekcji
 const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
   <svg
@@ -21,25 +22,37 @@ interface CollapsibleSectionProps {
   title: string;
   children: React.ReactNode;
 }
-
+interface CollapsibleSectionProps {
+  title: string;
+  children: React.ReactNode;
+}
 // Komponent dla rozwijanej sekcji (Akordeon)
 const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
+    <div className="bg-gray-800 rounded-xl overflow-hidden border border-blue-500">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex justify-between items-center p-4 text-left"
+        className="w-full bg-blue-500 flex justify-between items-center p-4 text-left"
+        aria-expanded={isOpen}
       >
-        <h3 className="text-lg font-semibold text-gray-200">{title}</h3>
+        <h3 className="text-lg font-bold text-white-500">{title}</h3>
         <ChevronIcon isOpen={isOpen} />
       </button>
-      {isOpen && (
-        <div className="p-4 border-t border-gray-700">
-          <div className="text-gray-300">{children}</div>
+
+      {/* Kontener do animacji z użyciem CSS grid */}
+      <div
+        className={`grid overflow-hidden transition-all duration-500 ease-in-out ${
+          isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+        }`}
+      >
+        <div className="overflow-hidden"> {/* Ten div jest potrzebny, aby uniknąć "ściskania" treści w trakcie animacji */}
+          <div className="p-4 border-t font-extrabold uppercase border-gray-700">
+            <div className="text-blue-500">{children}</div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
@@ -55,14 +68,14 @@ const MobileView = () => {
     gender: "M",
     chronicDiseases: ["Astma", "Cukrzyca typu 1", "Nadciśnienie tętnicze"],
     permanentMedications: ["Insulina", "Salbutamol", "Metformina"],
-	allergies: ["Penicylina", "Orzechy", "Lateks"]
+	allergies: ["Penicylina", "Orzeszki ziemne"]
   };
 
   return (
 	<>
 		<MobileNavbar />
 		<div className="bg-gray-800 min-h-screen text-gray-900 p-5 pt-10 font-family-roboto">
-      <div className="max-w-md mx-auto">
+      	<div className="max-w-md mx-auto">
 
         
 
@@ -74,33 +87,33 @@ const MobileView = () => {
   {`${person.age} ${[2, 3, 4].includes(person.age % 10) && ![12, 13, 14].includes(person.age % 100) ? 'lata' : 'lat'}`}
 </div>
             <div className="bg-red-500 text-sm font-bold p-2 rounded-lg">{person.gender}</div>
-            <div className="flex-1 text-lg font-medium text-white-500 border-b border-gray-500 pb-1 uppercase text-center">{person.name}</div>
+            <div className="flex-1 text-lg font-medium text-white-500 border-b border-gray-500 pb-1 uppercase text-center">{person.name} <MdBloodtype/></div>
           </div>
         </div>
         
         {/* === Sekcje Rozwijane === */}
-        <div className="space-y-4">
+        <div className="rounded-xl scrollbar-hide scroll-fade p-4 overflow-y-auto max-h-[55vh] space-y-4">
             <CollapsibleSection title="CHOROBY PRZEWLEKŁE">
                 <ul className="list-disc list-inside space-y-2">
-                    {person.chronicDiseases.map((disease) => <li key={disease}>{disease}</li>)}
+                    {(person.chronicDiseases.length !== 0)? person.chronicDiseases.map((disease) => <li key={disease}>{disease}</li>) : <li>Brak danych</li>}
                 </ul>
             </CollapsibleSection>
 
             <CollapsibleSection title="LEKI NA STAŁE">
                 <ul className="list-disc list-inside space-y-2">
-                    {person.permanentMedications.map((med) => <li key={med}>{med}</li>)}
+                    {(person.permanentMedications.length !== 0)? person.permanentMedications.map((med) => <li key={med}>{med}</li>) : <li>Brak danych</li>}
                 </ul>
             </CollapsibleSection>
 
 			<CollapsibleSection title="ALERGIE">
                 <ul className="list-disc list-inside space-y-2">
-                    {person.permanentMedications.map((allergies) => <li key={allergies}>{allergies}</li>)}
+                    {person.allergies.map((allergies) => <li key={allergies}>{allergies}</li>)}
                 </ul>
             </CollapsibleSection>
         </div>
 
 		{/* === Główne Przyciski === */}
-		<div className="p-5 fixed inset-x-0 bottom-0 flex justify-center">
+		<div className="p-5 fixed inset-x-0 bottom-0 flex justify-center ">
 
         <div className="grid grid-cols-2 gap-4 pb-20">
           <button className="bg-green-700 active:bg-green-600 active:transition-colors p-5 border-green-800 border-1 rounded-xl text-center font-extrabold text-[18px]">

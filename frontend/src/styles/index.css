@@ -76,3 +76,16 @@
   vertical-align: middle;
 }
 
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.scroll-fade {
+  mask-image: linear-gradient(to bottom, transparent 0, black 3%, black 97%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 3%, black 97%, transparent 100%);
+}
