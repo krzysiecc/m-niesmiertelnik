@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="384836b3-2262-4036-adca-ea3951f53c3e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendPY/app/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackendPY/app/crud.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendPY/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackendPY/app/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendPY/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackendPY/app/models.py" afterDir="false" />
@@ -40,9 +42,10 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "backend",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Lookasz/Documents/GitHub/iteracja-hackathon-1110",
+    "last_opened_file_path": "C:/Users/Lookasz/Documents/GitHub/iteracja-hackathon-1110/BackendPY/test.db",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -139,7 +142,8 @@
       <workItem from="1760197530003" duration="328000" />
       <workItem from="1760197873047" duration="1952000" />
       <workItem from="1760201052078" duration="104000" />
-      <workItem from="1760201158524" duration="939000" />
+      <workItem from="1760201158524" duration="2197000" />
+      <workItem from="1760203798045" duration="4366000" />
     </task>
     <servers />
   </component>
