@@ -5,9 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="384836b3-2262-4036-adca-ea3951f53c3e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/example/demo/DemoApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/test/java/com/example/demo/DemoApplicationTests.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendPY/app/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackendPY/app/crud.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendPY/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackendPY/app/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackendPY/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackendPY/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendPY/app/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackendPY/app/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendPY/app/security.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackendPY/app/security.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendPY/test.db" beforeDir="false" afterPath="$PROJECT_DIR$/BackendPY/test.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackendPY/test_main.http" beforeDir="false" afterPath="$PROJECT_DIR$/BackendPY/test_main.http" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +55,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "backend",
+    "git-widget-placeholder": "quickBackup",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Lookasz/Documents/GitHub/iteracja-hackathon-1110",
     "node.js.detected.package.eslint": "true",
