@@ -25,7 +25,7 @@ export default function Dashboard() {
         </div>
 
         <p className="text-xs text-text-secondary text-center">Zeskanuj, aby zobaczyć kartę informacyjną. <br />Ustaw jako tapetę w telefonie.</p>
-        <button className="w-full mt-2 px-4 py-2 bg-accent-primary hover:bg-accent-primary-hover text-text-inverted font-semibold rounded-lg transition-transform hover:scale-110 cursor-pointer">
+        <button className="w-full mt-2 px-4 py-2 bg-accent-primary hover:bg-accent-primary-hover text-on-accent font-semibold rounded-lg transition-transform hover:scale-105 cursor-pointer">
           Pobierz PNG
         </button>
 
@@ -53,7 +53,7 @@ export default function Dashboard() {
         </div>
         
         <div className="mt-8">
-            <button className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg cursor-pointer">
+            <button className="px-6 py-3 bg-accent-primary hover:bg-accent-primary-hover text-on-accent font-bold rounded-lg shadow-[0_5px_20px_var(--shadow-color)] transition-transform hover:scale-105 cursor-pointer">
                 Zablokuj i wygeneruj nowy kod QR
             </button>
             <p className="text-xs text-text-secondary mt-2">Użyj w przypadku zgubienia telefonu lub udostępnienia kodu niepowołanym osobom.</p>

@@ -9,6 +9,7 @@ import Mobile from "./components/mobile/MobileView";
 import { BasicLayout } from "./components/layout/BasicLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import LogoutSuccess from "./pages/LogoutSuccess";
 
 // Placeholder component for other pages
 const PlaceholderPage = ({ title }) => (
@@ -27,7 +28,8 @@ function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      
+      <Route path="/logout-success" element={<LogoutSuccess />} />
+
       <Route element={<BasicLayout />}>
         {/* Redirect /dashboard to the main dashboard view */}
         <Route path="/dashboard" element={<Navigate to="/dashboard/basic" replace />} />

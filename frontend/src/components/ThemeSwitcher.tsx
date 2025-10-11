@@ -12,10 +12,10 @@ export const ThemeSwitcher = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-full bg-background-tertiary text-text-primary hover:bg-border-primary transition-colors"
+      className="p-3 rounded-full bg-background-tertiary text-text-primary hover:bg-border-primary transition-colors cursor-pointer"
       aria-label="Toggle theme"
     >
-      {theme === 'dark' ? <MdOutlineLightMode size={20} /> : <MdOutlineDarkMode size={20} />}
+      {theme === 'dark' ? <MdOutlineLightMode size={30} /> : <MdOutlineDarkMode size={30} />}
     </button>
   );
 };
