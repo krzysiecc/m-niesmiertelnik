@@ -1,6 +1,6 @@
 # crud.py
 from sqlalchemy.orm import Session
-from models import User
+from .models import User
 
 def create_user(db: Session, user):
     db_user = User(**user.dict())
