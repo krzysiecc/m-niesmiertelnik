@@ -79,21 +79,22 @@
     Map semantic roles to colors from the base palette.
   ==================================================================
   */
-    --background-primary: var(--color-blue-400);
-    --background-secondary: var(--color-blue-500);
-    --background-tertiary: var(--color-blue-600);
 
-    --text-primary: var(--color-white-800);
-    --text-secondary: var(--color-white-500);
-    --text-inverted: var(--color-blue-200);
+  --background-primary: var(--color-gray-900);
+    --background-secondary: var(--color-white-800);
+    --background-tertiary: var(--color-white-500);
 
-    --accent-primary: var(--color-red-500);
-    --accent-primary-hover: var(--color-light-red-500);
+    --text-primary: var(--color-blue-100);
+    --text-secondary: var(--color-gray-300);
+    --text-inverted: var(--color-white-700);
 
-    --border-primary: var(--color-blue-500);
-    --border-hover: var(--color-blue-700);
+    --accent-primary: var(--color-red-400);
+    --accent-primary-hover: var(--color-light-red-600);
 
-    --shadow-color: rgba(217, 4, 41, 0.4);
+    --border-primary: var(--color-gray-800);
+    --border-hover: var(--color-gray-500);
+
+    --shadow-color: rgba(217, 4, 41, 0.25);
   }
 
   /*
@@ -102,22 +103,22 @@
     Re-map the same semantic roles to different colors.
   ==================================================================
   */
-  [data-theme='light'] {
-    --background-primary: var(--color-gray-900);
-    --background-secondary: var(--color-white-800);
-    --background-tertiary: var(--color-gray-800);
+  [data-theme='dark'] {
+    --background-primary: var(--color-blue-400);
+    --background-secondary: var(--color-blue-500);
+    --background-tertiary: var(--color-blue-600);
 
-    --text-primary: var(--color-blue-100);
-    --text-secondary: var(--color-gray-300);
-    --text-inverted: var(--color-white-700);
+    --text-primary: var(--color-white-800);
+    --text-secondary: var(--color-white-500);
+    --text-inverted: var(--color-blue-400);
 
-    --accent-primary: var(--color-red-500);
-    --accent-primary-hover: var(--color-light-red-400);
+    --accent-primary: var(--color-red-600);
+    --accent-primary-hover: var(--color-light-red-500);
 
-    --border-primary: var(--color-gray-800);
-    --border-hover: var(--color-gray-500);
+    --border-primary: var(--color-blue-500);
+    --border-hover: var(--color-blue-700);
 
-    --shadow-color: rgba(217, 4, 41, 0.25);
+    --shadow-color: rgba(217, 4, 41, 0.4);
   }
 }
 
