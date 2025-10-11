@@ -10,5 +10,4 @@ class User(Base):
     login = Column(String, unique=True, index=True)
     first_name = Column(String)
     last_name = Column(String)
-    allergies = Column(String, nullable=True)
-    chronic_conditions = Column(String, nullable=True)
+    hashed_password = Column(String, nullable=False)  # dodane pole
