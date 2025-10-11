@@ -1,5 +1,5 @@
 
-import Home from "./components/Home";
+import MobileView from "./components/MobileView"; "./components/MobileView";
 import { LenisProvider } from "./context/LenisContext";
 
 export default function App() {
@@ -7,7 +7,7 @@ export default function App() {
     <LenisProvider>
       <main>
         {/* <Layout> */}
-          <Home />
+          <MobileView />
         {/* </Layout> */}
       </main>
     </LenisProvider>
