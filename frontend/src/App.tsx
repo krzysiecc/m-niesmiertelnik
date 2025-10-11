@@ -1,5 +1,5 @@
 
-import MobileView from "./components/MobileView"; "./components/MobileView";
+import MobileView from "./components/MobileView";
 import { LenisProvider } from "./context/LenisContext";
 
 export default function App() {
