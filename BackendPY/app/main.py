@@ -21,7 +21,7 @@ def cleanup_expired_ids_task(db: Session):
 
 @app.get("/")
 def read_root():
-    return {"message": "Serwer działa!", "version": "1.0.0"}
+    return {"message": "Serwer po poprawie działa!", "version": "1.0.0"}
 
 # === LIFECYCLE ENDPOINTS ===
 
