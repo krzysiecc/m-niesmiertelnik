@@ -16,7 +16,7 @@ const menuItems = [
     { name: "Alergie", icon: <FaExclamationTriangle />, path: "/dashboard/health/allergies" },
   ]},
   { name: "PRODUKTY", icon: <FaShoppingBag />, path: "/dashboard/products", subItems: [
-    { name: "Opaska ratunkowa NFC", icon: <FaCreditCard />, path: "/dashboard/products/nfc" },
+    { name: "Opaska NFC", icon: <FaCreditCard />, path: "/dashboard/products/nfc" },
   ]},
   { name: "USTAWIENIA", icon: <FaCog />, path: "/dashboard/settings" },
 ];

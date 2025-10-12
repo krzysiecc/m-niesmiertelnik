@@ -4,9 +4,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Input } from '../components/forms/input';
 
+import { useAuth } from '../context/AuthContext';
+
 export default function Register() {
   const navigate = useNavigate();
-  // === 1. State Simplified: We only store what the user types. ===
+  
+  const { login } = useAuth(); 
+
   const [formData, setFormData] = useState({
     login: '',
     password: '',
@@ -61,10 +65,18 @@ export default function Register() {
       }
       
       const result = await response.json();
-      console.log('Success:', result);
       
-      alert('Rejestracja zakończona! Teraz uzupełnij swoje dane medyczne.');
-      navigate('/form');
+      if (result.user_id) {
+        // Log the user in with the ID from the registration response
+        login(result.user_id); 
+        
+        // Now that the user is logged in, navigate them to the form
+        alert('Rejestracja zakończona! Teraz uzupełnij swoje dane medyczne.');
+        navigate('/form');
+      } else {
+        // This is a safety net in case the API doesn't return the ID
+        throw new Error("Rejestracja udana, ale serwer nie zwrócił ID użytkownika. Skontaktuj się z pomocą techniczną.");
+      }
 
     } catch (err: any) {
       console.error('Error:', err);
