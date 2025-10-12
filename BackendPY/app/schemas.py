@@ -7,7 +7,6 @@ class UserCreate(BaseModel):
     password: str  # już bez max_length=72
     first_name: str
     last_name: str
-    date_of_birth: Optional[date] = None  # Data urodzenia (opcjonalna)
 
 class UserLogin(BaseModel):
     login: str
