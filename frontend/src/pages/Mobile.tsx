@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { MdBloodtype } from "react-icons/md";
 import { CollapsibleSection } from '../components/mobile/CollapsibleSection';
 import { ActionButtons } from '../components/mobile/ActionButtons';
+import { useParams } from 'react-router-dom';
 
 // Helper function for Polish age grammar, now co-located in this file
 const formatAge = (age: number) => {
@@ -18,7 +19,10 @@ const LoadingSpinner = () => (
   </div>
 );
 
+
 export default function Mobile() {
+  
+  
   // === 1. DATA FETCHING LOGIC ===
   // State to hold the user data and loading status
   const [userData, setUserData] = useState<any>(null); // Use a proper type/interface in a real app
@@ -29,7 +33,8 @@ export default function Mobile() {
     // In a real app, you would fetch data from your API here
     // const userId = /* get user ID from URL params */;
     // fetch(`/api/user/${userId}`).then(...)
-    
+     const { token } = useParams<{ token: string }>();
+    console.log("Scanned token:", token);
     // Simulating a network request with a timeout
     const timer = setTimeout(() => {
       setUserData({
@@ -51,6 +56,8 @@ export default function Mobile() {
   if (isLoading || !userData) {
     return <LoadingSpinner />;
   }
+
+
   
   // The rest of the component renders only after data is available
   return (

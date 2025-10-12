@@ -1,6 +1,7 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import MobileNavbar from './MobileNavbar';
 import { MdBloodtype } from "react-icons/md";
+import { useParams } from 'react-router';
 // Ikona strzałki (Chevron) dla rozwijanych sekcji
 const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
   <svg
@@ -58,6 +59,12 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, children
 
 // Główny komponent widoku
 const MobileView = () => {
+
+  useEffect(() => {
+    const { token } = useParams<{ token: string }>();
+    console.log("Scanned token:", token);
+
+  },[])
 
   // Przykładowe dane
   const person = {

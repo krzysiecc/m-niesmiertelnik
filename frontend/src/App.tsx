@@ -35,7 +35,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/logout-success" element={<LogoutSuccess />} />
-      <Route path="/mobile/scan" element={<Mobile />} />
+      <Route path="/mobile/scan/:token" element={<Mobile />} />
 
       {/* --- Group 2: Protected Routes (Require Login) --- */}
       <Route element={<ProtectedRoute />}>
