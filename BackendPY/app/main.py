@@ -108,7 +108,7 @@ def generate_token(
     data: dict = Body(...),
     db: Session = Depends(get_db)
 ):
-    """Przyjmuje dowolny JSON, zamienia na JWT i szyfruje."""
+    """Przyjmuje dowolny JSON, zamienia na JWT i szyfruje oraz przypisuje token do usera jeśli podano user_id."""
     try:
         user_login = "anonymous"
         user_id = data.get("user_id")
@@ -121,6 +121,11 @@ def generate_token(
         jwt_token = create_jwt_token(data)
         encrypted_token = double_sha256_encrypt(jwt_token)
         crud.create_form_data(db, user_login, encrypted_token, json_data)
+        # Jeśli user_id podano, przypisz token do usera
+        if user_id:
+            user.token = encrypted_token
+            db.commit()
+            db.refresh(user)
         return schemas.FormDataResponse(
             encrypted_token=encrypted_token
         )

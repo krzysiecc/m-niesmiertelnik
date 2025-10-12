@@ -7,6 +7,7 @@ class UserCreate(BaseModel):
     password: str  # już bez max_length=72
     first_name: str
     last_name: str
+    date_of_birth: Optional[date] = None  # Data urodzenia (opcjonalna)
 
 class UserLogin(BaseModel):
     login: str
@@ -18,24 +19,12 @@ class UserResponse(BaseModel):
     last_name: str
     date_of_birth: Optional[date] = None
     user_id: str
-    is_blocked: bool = False
+    is_blocked: bool
     created_at: datetime
     updated_at: datetime
 
     class Config:
         from_attributes = True
-        schema_extra = {
-            "example": {
-                "login": "string",
-                "first_name": "string",
-                "last_name": "string",
-                "date_of_birth": "2025-10-12",
-                "user_id": "string",
-                "is_blocked": False,
-                "created_at": "2025-10-12T00:36:37.712Z",
-                "updated_at": "2025-10-12T00:36:37.712Z"
-            }
-        }
 
 class UserUpdate(BaseModel):
     first_name: Optional[str] = None

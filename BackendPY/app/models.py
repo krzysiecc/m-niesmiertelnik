@@ -15,6 +15,7 @@ class User(Base):
     date_of_birth = Column(DateTime, nullable=True)  # Data urodzenia
     user_id = Column(String, unique=True, index=True, nullable=False, default=lambda: str(uuid.uuid4()))  # Unikalny ID użytkownika
     is_blocked = Column(Boolean, default=False, nullable=False)  # Status blokady
+    token = Column(String, nullable=True, default=None)  # Token użytkownika
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
