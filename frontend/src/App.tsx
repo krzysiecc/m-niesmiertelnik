@@ -15,7 +15,6 @@ import Mobile from "./pages/Mobile";
 // CORRECTED: The component that makes the choice is ResponsiveLayout
 import { ResponsiveLayout } from "./components/layout/ResponseLayout";
 
-import MedicalInfoForm from "./pages/MedicalInfoForm"
 // Placeholder component for other pages
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="bg-background-secondary p-8 rounded-xl border border-border-primary">

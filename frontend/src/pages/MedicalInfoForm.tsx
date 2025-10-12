@@ -174,9 +174,9 @@ export default function Login() {
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                
                 className="w-full p-3 border border-border-primary rounded-lg bg-background-tertiary text-text-primary"
               >
+                <option value="" disabled selected>Wybierz płeć</option>
                 <option value="M">Mężczyzna</option>
                 <option value="F">Kobieta</option>
               </select>
