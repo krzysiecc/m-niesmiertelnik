@@ -6,17 +6,13 @@ import { Input } from '../components/forms/Input';
 
 export default function Register() {
   const navigate = useNavigate();
-  // 1. Update state to match the required API schema
+  // === 1. State Simplified: We only store what the user types. ===
   const [formData, setFormData] = useState({
-    login: '', // Renamed from 'email'
+    login: '',
     password: '',
     confirmPassword: '',
-    first_name: '',
-    last_name: '',
-    date_of_birth: '',
   });
-  
-  // State for loading and error feedback
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,12 +20,10 @@ export default function Register() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // 2. Refactor handleSubmit to send the correct payload
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null); // Clear previous errors
+    setError(null);
 
-    // Basic client-side validation
     if (formData.password !== formData.confirmPassword) {
       setError("Hasła nie są zgodne!");
       return;
@@ -41,10 +35,19 @@ export default function Register() {
 
     setIsLoading(true);
 
-    // Create the payload for the API, excluding the confirmPassword field
-    const { confirmPassword, ...apiData } = formData;
-    console.log("Submitting to /register with JSON:", JSON.stringify(apiData, null, 2));
+    // === 2. API Payload Construction: Add empty/placeholder fields here. ===
+    const apiData = {
+      login: formData.login,
+      password: formData.password,
+      first_name: "", // Sent as an empty string as requested
+      last_name: "",  // Sent as an empty string as requested
+      // The API expects a valid date format. Sending an empty string might cause an error.
+      // A placeholder date like '1900-01-01' is a safer default.
+      date_of_birth: "1900-01-01", 
+    };
     
+    console.log("Submitting to /register with JSON:", JSON.stringify(apiData, null, 2));
+
     try {
       const response = await fetch('https://iteracja-hackathon-1110.onrender.com/register', {
         method: 'POST',
@@ -53,7 +56,6 @@ export default function Register() {
       });
 
       if (!response.ok) {
-        // Try to parse the error message from the API
         const errorResult = await response.json();
         throw new Error(errorResult.message || `Błąd serwera: ${response.status}`);
       }
@@ -61,7 +63,6 @@ export default function Register() {
       const result = await response.json();
       console.log('Success:', result);
       
-      // On success, notify the user and redirect to the login page
       alert('Rejestracja zakończona sukcesem! Zaloguj się, aby uzupełnić swoje dane medyczne.');
       navigate('/login');
 
@@ -69,10 +70,10 @@ export default function Register() {
       console.error('Error:', err);
       setError(err.message || 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie.');
     } finally {
-      setIsLoading(false); // Re-enable the button
+      setIsLoading(false);
     }
   };
-  
+
   const handleEpuapLogin = () => {
     alert("Rejestracja przez ePUAP nie jest jeszcze zaimplementowana.");
   };
@@ -86,31 +87,25 @@ export default function Register() {
         transition={{ duration: 0.5 }}
       >
         <div className="text-center mb-8">
-            <Link to="/">
-                <img src="/logo.png" alt="Logo" className="mx-auto h-16 mb-4" />
+          <Link to="/">
+            <img src="/logo.png" alt="Logo" className="mx-auto h-16 mb-4" />
+          </Link>
+          <h1 className="text-3xl font-bold text-text-primary">Stwórz nowe konto</h1>
+          <p className="text-text-secondary mt-2">
+            Masz już konto?{' '}
+            <Link to="/login" className="font-semibold text-highlight hover:underline">
+              Zaloguj się
             </Link>
-            <h1 className="text-3xl font-bold text-text-primary">Stwórz nowe konto</h1>
-            <p className="text-text-secondary mt-2">
-              Masz już konto?{' '}
-              <Link to="/login" className="font-semibold text-highlight hover:underline">
-                Zaloguj się
-              </Link>
-            </p>
+          </p>
         </div>
 
         <div className="bg-background-secondary p-8 rounded-xl border border-border-primary shadow-lg">
-          {/* 3. Update the form with new fields */}
+          {/* === 3. Form Simplified: Removed extra fields from the UI. === */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="flex flex-col md:flex-row gap-4">
-              <Input label="Imię" type="text" name="first_name" placeholder="Jan" value={formData.first_name} onChange={handleChange} required />
-              <Input label="Nazwisko" type="text" name="last_name" placeholder="Kowalski" value={formData.last_name} onChange={handleChange} required />
-            </div>
-            <Input label="Data urodzenia" type="date" name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} required />
             <Input label="Adres e-mail (login)" type="email" name="login" placeholder="twoj@email.com" value={formData.login} onChange={handleChange} required />
             <Input label="Hasło (min. 8 znaków)" type="password" name="password" placeholder="••••••••" value={formData.password} onChange={handleChange} required />
             <Input label="Potwierdź hasło" type="password" name="confirmPassword" placeholder="••••••••" value={formData.confirmPassword} onChange={handleChange} required />
             
-            {/* Display error message if it exists */}
             {error && (
               <div className="text-center p-3 bg-accent-primary/20 rounded-lg">
                 <p className="text-sm text-accent-primary font-semibold">{error}</p>
@@ -122,7 +117,7 @@ export default function Register() {
 
             <button
               type="submit"
-              disabled={isLoading} // Disable button while loading
+              disabled={isLoading}
               className="w-full px-4 py-3 bg-accent-primary hover:bg-accent-primary-hover text-on-accent font-bold rounded-lg transition-transform hover:scale-105 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Rejestrowanie...' : 'Zarejestruj się'}

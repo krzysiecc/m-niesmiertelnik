@@ -2,7 +2,7 @@
 import { NavLink } from "react-router-dom";
 import {
   FaUser, FaHeartbeat, FaBriefcaseMedical, FaPills,
-  FaShoppingBag, FaCreditCard, FaCog
+  FaShoppingBag, FaCreditCard, FaCog, FaExclamationTriangle
 } from 'react-icons/fa';
 
 import { LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
@@ -13,6 +13,7 @@ const menuItems = [
   { name: "DANE ZDROWOTNE", icon: <FaHeartbeat />, path: "/dashboard/health", subItems: [
     { name: "Choroby przewlekłe", icon: <FaBriefcaseMedical />, path: "/dashboard/health/conditions" },
     { name: "Przyjmowane leki", icon: <FaPills />, path: "/dashboard/health/medications" },
+    { name: "Alergie", icon: <FaExclamationTriangle />, path: "/dashboard/health/allergies" },
   ]},
   { name: "PRODUKTY", icon: <FaShoppingBag />, path: "/dashboard/products", subItems: [
     { name: "Opaska ratunkowa NFC", icon: <FaCreditCard />, path: "/dashboard/products/nfc" },
