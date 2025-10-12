@@ -32,12 +32,11 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/logout-success" element={<LogoutSuccess />} />
-
+      <Route path="/form" element={<MedicalInfoForm />} />
       <Route path="/mobile/scan" element={<Mobile />} />
 
       <Route element={<ResponsiveLayout />}>
         
-        <Route path="/form" element={<MedicalInfoForm />} />
         
         <Route path="/dashboard" element={<Navigate to="/dashboard/basic" replace />} />
         <Route path="/dashboard/basic" element={<Dashboard />} />
