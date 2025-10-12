@@ -20,6 +20,7 @@ class UserResponse(BaseModel):
     date_of_birth: Optional[date] = None
     user_id: str
     is_blocked: bool
+    token: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

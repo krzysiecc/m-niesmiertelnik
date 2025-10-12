@@ -46,10 +46,11 @@ def login_user(user: schemas.UserLogin, db: Session = Depends(get_db)):
 
 @app.get("/users/{user_id}", response_model=schemas.UserResponse)
 def get_user_by_id(user_id: str, db: Session = Depends(get_db)):
-    """Pobranie danych użytkownika po ID"""
+    """Pobranie danych użytkownika po ID (z tokenem)"""
     db_user = crud.get_user_by_user_id(db, user_id)
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
+    # Zwróć usera z polem token
     return db_user
 
 @app.post("/users/{user_id}/new_id", response_model=schemas.NewIdResponse)
