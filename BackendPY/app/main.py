@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks
+from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks, Body
 from sqlalchemy.orm import Session
 from . import crud, schemas
 from .database import Base, engine, get_db
@@ -104,38 +104,26 @@ def delete_user_account(user_id: str, db: Session = Depends(get_db)):
 # === TOKEN ENDPOINTS ===
 
 @app.post("/generateToken", response_model=schemas.FormDataResponse)
-def generate_token(form_data: schemas.FormDataCreate, db: Session = Depends(get_db)):
-    """Generowanie zaszyfrowanego JWT tokenu z danych formularza"""
+def generate_token(
+    data: dict = Body(...),
+    db: Session = Depends(get_db)
+):
+    """Przyjmuje dowolny JSON, zamienia na JWT i szyfruje."""
     try:
-        # Sprawdź czy user_id istnieje (jeśli podano)
         user_login = "anonymous"
-        if form_data.user_id:
-            user = crud.get_user_by_user_id(db, form_data.user_id)
+        user_id = data.get("user_id")
+        if user_id:
+            user = crud.get_user_by_user_id(db, user_id)
             if not user:
                 raise HTTPException(status_code=404, detail="User not found")
             user_login = user.login
-        
-        # Konwertuj dane do JSON stringa
-        json_data = json.dumps(form_data.data, ensure_ascii=False)
-        
-        # Utwórz JWT token
-        jwt_token = create_jwt_token(form_data.data)
-        
-        # Zaszyfruj token dwustronnym SHA256 (hash do identyfikacji)
+        json_data = json.dumps(data, ensure_ascii=False)
+        jwt_token = create_jwt_token(data)
         encrypted_token = double_sha256_encrypt(jwt_token)
-        
-        # WAŻNE: Zapisz dane w bazie z powiązaniem encrypted_token -> oryginalne dane
-        # To jest konieczne bo SHA256 to funkcja jednokierunkowa
         crud.create_form_data(db, user_login, encrypted_token, json_data)
-        
-        # Wygeneruj dane do QR kodu (samo zaszyfrowany token)
-        qr_data = generate_qr_data(encrypted_token)
-        
         return schemas.FormDataResponse(
-            encrypted_token=encrypted_token,
-            qr_data=qr_data  # To będzie zawierać sam zaszyfrowany token
+            encrypted_token=encrypted_token
         )
-    
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to generate token: {str(e)}")
 

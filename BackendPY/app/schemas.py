@@ -38,7 +38,6 @@ class FormDataCreate(BaseModel):
 
 class FormDataResponse(BaseModel):
     encrypted_token: str
-    qr_data: str  # Dane do umieszczenia w QR kodzie
 
 class TokenDecryptRequest(BaseModel):
     encrypted_token: str
