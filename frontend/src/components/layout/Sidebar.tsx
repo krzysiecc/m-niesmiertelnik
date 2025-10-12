@@ -39,8 +39,8 @@ export const pathTitles = {
 };
 
 export const Sidebar = ({ isExpanded, onToggle }: SidebarProps) => {
-  const baseLinkClass = "flex items-center px-4 py-3 rounded-lg hover:bg-accent-primary-hover transition-colors";
-  const activeLinkClass = "bg-accent-primary text-on-accent shadow-lg shadow-accent-primary/30";
+  const baseLinkClass = "flex items-center px-4 py-3 rounded-lg transition-colors";
+  const activeLinkClass = "bg-accent-primary text-on-accent hover:bg-accent-primary-hover shadow-lg shadow-accent-primary/30";
 
   const AnimatedText = ({ text }: { text: React.ReactNode }) => (
     <span className={`px-4 whitespace-nowrap transition-transform duration-300 ${isExpanded ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
@@ -70,15 +70,21 @@ export const Sidebar = ({ isExpanded, onToggle }: SidebarProps) => {
             <NavLink
               to={item.path}
               end={!item.subItems}
-              // === FIX 1: PERFECT CENTERING ===
-              // When collapsed (`!isExpanded`), we add `justify-center` to center the icon.
-              className={({ isActive }) => `${baseLinkClass} ${!isExpanded && 'justify-center'} ${isActive ? activeLinkClass : "text-text-secondary"}`}
+              className={({ isActive }) => 
+                `${baseLinkClass} transition-[padding] duration-300 ${isExpanded ? 'px-4' : 'px-4'} ${
+                  isActive 
+                    ? activeLinkClass 
+                    : "text-text-secondary hover:bg-background-tertiary"
+                }`
+              }
+
             >
               <span className="text-xl flex-shrink-0">{item.icon}</span>
               <div className="overflow-hidden">
                 <AnimatedText text={<span className="font-semibold">{item.name}</span>} />
               </div>
             </NavLink>
+
             
             {/* Sub-items with a smooth transition */}
             <div className={`transition-all duration-300 ease-in-out grid ${isExpanded && item.subItems ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
