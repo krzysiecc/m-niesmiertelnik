@@ -10,9 +10,9 @@ interface HealthDataListProps {
 // For now, this is a presentational component. State logic would be added later.
 export const HealthDataList = ({ title, items, placeholder }: HealthDataListProps) => (
   <div className="bg-background-secondary p-8 rounded-xl border border-border-primary">
-    <h1 className="text-2xl font-bold text-text-primary mb-6">{title}</h1>
+    {/* <h1 className="text-2xl font-bold text-text-primary mb-6">{title}</h1> */}
     <div className="space-y-3 mb-6">
-      {items.length > 0 ? (
+      {items[0].length > 0 ? (
         items.map((item, index) => (
           <div key={index} className="flex items-center justify-between gap-4 p-3 bg-background-tertiary rounded-lg">
             <span className="font-semibold text-text-primary">{item}</span>

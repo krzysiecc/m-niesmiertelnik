@@ -45,7 +45,7 @@ const todayIso = () => {
   return `${d.getFullYear()}-${mm}-${dd}`;
 };
 
-export default function Login() {
+export default function MedicalInfoForm() {
   const navigate = useNavigate();
     const { userId } = useAuth();
   
@@ -123,28 +123,33 @@ export default function Login() {
     e.preventDefault();
 
     try {
+      // Your API call logic is correct
       const response = await fetch('https://iteracja-hackathon-1110.onrender.com/generateToken', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           ...(userId && { userId }),
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, userId }), // Pass userId in body just in case
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || 'Błąd logowania. Sprawdź login i hasło.');
+        throw new Error(result.message || 'Błąd zapisywania danych. Spróbuj ponownie.');
       }
 
-      console.log('Simulating submission. Data:', JSON.stringify(formData, null, 2));
-      navigate('/dashboard');
-    } catch (err) {
+      console.log('Submission successful. Forcing reload to dashboard...');
+
+      alert('Profil zaktualizowany! Teraz możesz się zalogować.');
+      navigate('/login'); 
+
+    } catch (err: any) {
       console.error('Error submitting form:', err);
-      alert('Wystąpił błąd podczas zapisywania danych. Spróbuj ponownie.');
+      alert(err.message);
     }
   };
+
 
   return (
     

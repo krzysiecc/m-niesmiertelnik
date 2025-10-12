@@ -17,9 +17,6 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // A checkbox state to allow you to easily test the "first login" flow
-  const [simulateFirstLogin, setSimulateFirstLogin] = useState(false);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -42,25 +39,13 @@ export default function Login() {
         throw new Error(result.message || 'Błąd logowania. Sprawdź login i hasło.');
       }
 
-      // --- ONBOARDING LOGIC ---
-      // The API should return a flag like `is_profile_complete`. We simulate it for testing.
-      // The `?? true` part means if the API doesn't send the flag, we assume the profile is complete.
-      const isProfileComplete = simulateFirstLogin ? false : (result.is_profile_complete ?? true);
-
-      if (result.user_id) {
-        login(result.user_id); // Store the user ID in our context
-        
-        console.log('Login Success:', { ...result, is_profile_complete: isProfileComplete });
-
-        // Conditional redirect based on profile status
-        if (isProfileComplete) {
-          navigate('/dashboard'); // Go to dashboard for existing users
+        if (result.user_id) {
+          login(result.user_id); // Store user ID
+          navigate('/dashboard'); // ALWAYS go to the dashboard.
         } else {
-          navigate('/form'); // Go to medical form for new users
+          throw new Error("Odpowiedź serwera nie zawiera ID użytkownika.");
         }
-      } else {
-        throw new Error("Odpowiedź serwera nie zawiera ID użytkownika.");
-      }
+
     } catch (err: any) {
       console.error('Error:', err);
       setError(err.message);
@@ -88,11 +73,7 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <Input label="Adres e-mail" type="email" name="login" placeholder="twoj@email.com" value={formData.login} onChange={handleChange} required />
             <Input label="Hasło" type="password" name="password" placeholder="••••••••" value={formData.password} onChange={handleChange} required />
-            
-            <div className="flex items-center gap-2">
-              <input type="checkbox" id="first-login-sim" className="h-4 w-4 rounded border-gray-300 text-highlight focus:ring-highlight" checked={simulateFirstLogin} onChange={(e) => setSimulateFirstLogin(e.target.checked)} />
-              <label htmlFor="first-login-sim" className="text-sm text-text-secondary">Symuluj pierwszy login</label>
-            </div>
+
 
             {error && <p className="text-sm text-accent-primary text-center font-semibold">{error}</p>}
             

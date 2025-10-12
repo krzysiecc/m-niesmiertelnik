@@ -7,9 +7,11 @@ import { UserDataPanel } from "../components/dashboard/UserDataPanel";
 export default function Dashboard() {
   const { userId } = useAuth();
   // Data now comes from our context! No more fetching here.
-  const { profileData, isLoading, error } = useProfileData(); 
+  const { profileData, token, isLoading, error } = useProfileData();
 
-  const qrValue = `https://mniesmiertelnik.com/mobile/scan?user=${userId}`;
+  const qrValue = token
+  ? `https://iteracja-hackathon-1110-2.onrender.com/mobile/scan/${encodeURIComponent(token)}`
+  : "";
 
   if (isLoading) return <div className="text-center p-8 text-text-primary font-semibold">Ładowanie danych...</div>;
   if (error) return <div className="text-center p-8 text-accent-primary font-semibold">{error}</div>;

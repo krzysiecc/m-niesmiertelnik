@@ -63,8 +63,8 @@ export default function Register() {
       const result = await response.json();
       console.log('Success:', result);
       
-      alert('Rejestracja zakończona sukcesem! Zaloguj się, aby uzupełnić swoje dane medyczne.');
-      navigate('/login');
+      alert('Rejestracja zakończona! Teraz uzupełnij swoje dane medyczne.');
+      navigate('/form');
 
     } catch (err: any) {
       console.error('Error:', err);

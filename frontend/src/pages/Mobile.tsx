@@ -19,13 +19,49 @@ const LoadingSpinner = () => (
   </div>
 );
 
-const calculateAge = (birthDate: string): number => {
-  const today = new Date();
-  const birth = new Date(birthDate);
-  let age = today.getFullYear() - birth.getFullYear();
-  const monthDiff = today.getMonth() - birth.getMonth();
+// const calculateAge = (birthDate: string): number => {
+//   const today = new Date();
   
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+//   const birth = new Date(birthDate);
+//   let age = today.getFullYear() - birth.getFullYear();
+//   const monthDiff = today.getMonth() - birth.getMonth();
+  
+//   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+//     age--;
+//   }
+  
+//   return age;
+// };
+
+const calculateAge = (birthDateString: string): number | null => {
+  // 1. Split the 'dd.mm.yyyy' string into parts
+  const parts = birthDateString.split('.');
+  
+  // 2. Add a safety check in case the format is wrong
+  if (parts.length !== 3) {
+    console.error("Invalid date format received:", birthDateString);
+    return null; // Return null to prevent crashing
+  }
+
+  // 3. Rearrange parts into 'yyyy-mm-dd' format, which is universally understood
+  const [day, month, year] = parts;
+  const isoDateString = `${year}-${month}-${day}`;
+  
+  // 4. Now, create the date object from the safe, standardized format
+  const birthDate = new Date(isoDateString);
+  
+  // Safety check if the reformatted date is still invalid (e.g., "32.13.2023")
+  if (isNaN(birthDate.getTime())) {
+    console.error("Could not create a valid date from:", isoDateString);
+    return null;
+  }
+
+  // 5. The rest of your original logic remains the same
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
     age--;
   }
   
@@ -68,7 +104,7 @@ export default function Mobile() {
     };
 
     fetchData();
-    
+
     // Simulating a network request with a timeout
     const timer = setTimeout(() => {
       // setUserData({
@@ -82,7 +118,7 @@ export default function Mobile() {
       // });
       setIsLoading(false);
     }, 1000); // Simulate 1 second loading time
-
+    
     return () => clearTimeout(timer); // Cleanup
   }, []); // Empty dependency array ensures this runs only once
 
