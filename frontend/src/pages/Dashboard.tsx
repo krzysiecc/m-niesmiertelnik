@@ -1,11 +1,29 @@
 
 import { QRCodeSVG } from "qrcode.react";
 
-import { useState, useRef, useLayoutEffect } from "react";
+import { useState, useRef, useLayoutEffect, useEffect } from "react";
 
 export default function Dashboard() {
   const qrValue = "https://yourapi.com/user/jwt-goes-here";
+   const [formData, setFormData] = useState();
 
+  useEffect(() => {
+    // 1. Odczytaj dane z sessionStorage
+    const savedData = sessionStorage.getItem('formData');
+
+    if (savedData) {
+      setFormData(JSON.parse(savedData));
+      // 2. (WAŻNE) Usuń dane po ich odczytaniu, aby uniknąć wyświetlania starych danych w przyszłości
+      sessionStorage.removeItem('formData');
+    }
+  }, []); // Uruchom tylko raz po zamontowaniu
+useEffect(() => {
+  // Ten kod uruchomi się za każdym razem, gdy `formData` zmieni swoją wartość 
+  // (ale nie, gdy jest `null`)
+  if (formData) {
+    console.log("formData has been updated:", formData);
+  }
+}, [formData]); // Tablica zależności z `formData`
   // === 2. Set up state for the size and a ref for the container ===
   const [qrSize, setQrSize] = useState(200); // Default size
   const qrContainerRef = useRef<HTMLDivElement>(null);
@@ -64,21 +82,21 @@ export default function Dashboard() {
       {/* Basic Data Section */}
       <div className="flex-1 bg-background-secondary p-6 rounded-xl border border-border-primary">
         {/* ... (rest of the component is unchanged) ... */}
-        <h1 className="text-4xl font-bold text-text-primary">Jan Kowalski</h1>
+        <h1 className="text-4xl font-bold text-text-primary"></h1>
         <p className="text-text-secondary mt-1">ID Użytkownika: usr_12345abcde</p>
         <div className="mt-6 border-t border-border-primary pt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <p className="text-sm text-text-secondary">Data urodzenia</p>
-            <p className="font-semibold text-text-primary">01.01.1980</p>
+            <p className="font-semibold text-text-primary"></p>
           </div>
           <div>
             <p className="text-sm text-text-secondary">Grupa krwi</p>
-            <p className="font-semibold text-text-primary">A Rh+</p>
+            <p className="font-semibold text-text-primary"></p>
           </div>
           <div>
             <p className="text-sm text-text-secondary">Kontakt ICE</p>
-            <p className="font-semibold text-text-primary">Anna Kowalska (żona)</p>
-            <p className="font-mono text-sm text-text-secondary">+48 123 456 789</p>
+            <p className="font-semibold text-text-primary"></p>
+            <p className="font-mono text-sm text-text-secondary"></p>
           </div>
         </div>
         <div className="mt-8">

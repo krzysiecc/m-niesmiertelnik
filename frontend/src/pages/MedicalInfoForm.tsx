@@ -48,7 +48,7 @@ export default function Login() {
     bloodType: '',
     birthdate: '22.01.2004',
     name: '',
-    gender: 'M',
+    gender: '',
     chronicDiseases: [''],
     allergies: [''],
     permanentMedications: [''],
@@ -114,6 +114,7 @@ export default function Login() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Simulating submission. Data:', JSON.stringify(formData, null, 2));
+    sessionStorage.setItem('formData', JSON.stringify(formData));
     navigate('/dashboard');
   };
 
@@ -147,7 +148,7 @@ export default function Login() {
 
             {/* Date picker */}
             <div>
-              <label className="block mb-2 text-sm font-medium text-text-secondary">
+              <label className="block mb-2 text-m font-medium text-text-secondary">
                 Data urodzenia
               </label>
               <input
@@ -169,7 +170,7 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block mb-2 text-sm font-medium text-text-secondary">Płeć</label>
+              <label className="block mb-2 text-m font-medium text-text-secondary">Płeć</label>
               <select
                 name="gender"
                 value={formData.gender}
@@ -194,7 +195,7 @@ export default function Login() {
             {/* Choroby przewlekłe */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-text-secondary">Choroby przewlekłe</label>
+                <label className="text-xl font-medium text-text-secondary">Choroby przewlekłe</label>
                 <button
                   type="button"
                   onClick={() => addArrayItem('chronicDiseases')}
@@ -232,7 +233,7 @@ export default function Login() {
             {/* Alergie */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-text-secondary">Alergie</label>
+                <label className="text-xl font-medium text-text-secondary">Alergie</label>
                 <button
                   type="button"
                   onClick={() => addArrayItem('allergies')}
@@ -270,7 +271,7 @@ export default function Login() {
             {/* Leki stałe */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-text-secondary">Leki przyjmowane na stałe</label>
+                <label className="text-xl font-medium text-text-secondary">Leki przyjmowane na stałe</label>
                 <button
                   type="button"
                   onClick={() => addArrayItem('permanentMedications')}
@@ -308,7 +309,7 @@ export default function Login() {
             {/* Zaufane kontakty */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-text-secondary">Zaufane kontakty</label>
+                <label className="text-xl font-medium text-text-secondary">Zaufane kontakty</label>
                 <button
                   type="button"
                   onClick={addContact}
