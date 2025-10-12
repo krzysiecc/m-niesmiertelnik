@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks, Body
+from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks, Body, Header
 from sqlalchemy.orm import Session
 from . import crud, schemas
 from .database import Base, engine, get_db
@@ -107,12 +107,12 @@ def delete_user_account(user_id: str, db: Session = Depends(get_db)):
 @app.post("/generateToken", response_model=schemas.FormDataResponse)
 def generate_token(
     data: dict = Body(...),
+    user_id: str = Header(None, alias="userId"),
     db: Session = Depends(get_db)
 ):
-    """Przyjmuje dowolny JSON, zamienia na JWT i szyfruje oraz przypisuje token do usera jeśli podano user_id."""
+    """Przyjmuje dowolny JSON, zamienia na JWT i szyfruje oraz przypisuje token do usera jeśli userId jest w nagłówku."""
     try:
         user_login = "anonymous"
-        user_id = data.get("user_id")
         if user_id:
             user = crud.get_user_by_user_id(db, user_id)
             if not user:
