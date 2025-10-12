@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Input } from '../components/forms/input';
+import { Input } from '../components/forms/Input';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ export default function Register() {
       console.log('Success:', result);
       
       // On success, notify the user and redirect to the login page
-      alert('Rejestracja zakończona sukcesem! Możesz się teraz zalogować.');
+      alert('Rejestracja zakończona sukcesem! Zaloguj się, aby uzupełnić swoje dane medyczne.');
       navigate('/login');
 
     } catch (err: any) {

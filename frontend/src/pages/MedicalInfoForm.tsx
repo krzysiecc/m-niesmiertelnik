@@ -2,25 +2,21 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Input } from '../components/forms/input';
-
-type TrustedContact = {
-  fullName: string;
-  phone: string;
-};
+import { Input } from '../components/forms/Input';
 
 type FormData = {
   bloodType: string;
-  birthdate: string; // DD.MM.RRRR
+  birthdate: string; // w stanie zawsze DD.MM.RRRR
   name: string;
-  gender: 'M' | 'F';
+  gender: 'M' | 'F' | 'O';
   chronicDiseases: string[];
   allergies: string[];
   permanentMedications: string[];
-  trustedContacts: TrustedContact[];
 };
 
+// helpery konwersji: DD.MM.RRRR <-> YYYY-MM-DD
 const toIsoFromPl = (pl: string): string => {
+  // oczekuje "DD.MM.RRRR"
   const m = pl.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
   if (!m) return '';
   const [, dd, mm, yyyy] = m;
@@ -28,12 +24,14 @@ const toIsoFromPl = (pl: string): string => {
 };
 
 const toPlFromIso = (iso: string): string => {
+  // oczekuje "YYYY-MM-DD"
   const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (!m) return '';
   const [, yyyy, mm, dd] = m;
   return `${dd}.${mm}.${yyyy}`;
 };
 
+// dzisiejsza data jako ISO do atrybutu max
 const todayIso = () => {
   const d = new Date();
   const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -46,7 +44,7 @@ export default function Login() {
 
   const [formData, setFormData] = useState<FormData>({
     bloodType: '',
-    birthdate: '22.01.2004',
+    birthdate: '22.01.2004',   // stan w PL formacie
     name: '',
     gender: '',
     chronicDiseases: [''],
@@ -87,39 +85,15 @@ export default function Login() {
       return { ...p, [field]: arr };
     });
 
-  // --- Zaufane kontakty ---
-  const handleContactChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number,
-    key: keyof TrustedContact
-  ) => {
-    const { value } = e.target;
-    setFormData((prev) => {
-      const contacts = [...prev.trustedContacts];
-      contacts[index] = { ...contacts[index], [key]: value };
-      return { ...prev, trustedContacts: contacts };
-    });
-  };
-
-  const addContact = () =>
-    setFormData((p) => ({ ...p, trustedContacts: [...p.trustedContacts, { fullName: '', phone: '' }] }));
-
-  const removeContact = (index: number) =>
-    setFormData((p) => {
-      const contacts =
-        p.trustedContacts.length > 1 ? p.trustedContacts.filter((_, i) => i !== index) : p.trustedContacts;
-      return { ...p, trustedContacts: contacts };
-    });
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // birthdate pozostaje w formacie DD.MM.RRRR
     console.log('Simulating submission. Data:', JSON.stringify(formData, null, 2));
     sessionStorage.setItem('formData', JSON.stringify(formData));
     navigate('/dashboard');
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background-primary p-4">
       <motion.div
         className="w-full max-w-2xl"
         initial={{ opacity: 0, y: -20 }}
@@ -146,13 +120,14 @@ export default function Login() {
               required
             />
 
-            {/* Date picker */}
+            {/* Date picker z zachowaniem stylu i konwersją formatu */}
             <div>
               <label className="block mb-2 text-m font-medium text-text-secondary">
                 Data urodzenia
               </label>
               <input
                 type="date"
+                // pokazujemy wartość w ISO, stan trzymamy w PL
                 value={toIsoFromPl(formData.birthdate)}
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -177,9 +152,9 @@ export default function Login() {
                 onChange={handleChange}
                 className="w-full p-3 border border-border-primary rounded-lg bg-background-tertiary text-text-primary"
               >
-                <option value="" disabled selected>Wybierz płeć</option>
                 <option value="M">Mężczyzna</option>
                 <option value="F">Kobieta</option>
+                <option value="O">Inna / Nie chcę podawać</option>
               </select>
             </div>
 
@@ -187,7 +162,7 @@ export default function Login() {
               label="Grupa krwi"
               type="text"
               name="bloodType"
-              placeholder="np. A+"
+              placeholder="np. 0 Rh+"
               value={formData.bloodType}
               onChange={handleChange}
             />
@@ -365,6 +340,5 @@ export default function Login() {
           </form>
         </div>
       </motion.div>
-    </div>
   );
 }
