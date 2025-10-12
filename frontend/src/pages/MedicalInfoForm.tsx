@@ -56,9 +56,9 @@ export default function Login() {
     birthdate: '22.01.2004',
     name: '',
     gender: 'M',
-    chronicDiseases: ['', '', ''],
-    allergies: ['', '', ''],
-    permanentMedications: ['', '', ''],
+    chronicDiseases: [''],
+    allergies: [''],
+    permanentMedications: [''],
     trustedContacts: [{ fullName: '', phone: '' }], // startowo jeden wiersz
     is_blocked: false,
   });

@@ -103,7 +103,7 @@ export default function Mobile() {
         <div className="max-w-md mx-auto p-4 bg-blue-300 rounded-xl border border-border-primary">
           <h2 className="text-sm font-semibold text-text-inverted mb-3">INFORMACJE O OSOBIE</h2>
           <div className="flex items-center gap-4">
-            <div className="bg-accent-primary-hover text-text-invertedtext-sm font-bold p-2 rounded-lg">{formatAge(calculateAge(userData.data.birthdate))}</div>
+            <div className="bg-accent-primary-hover text-text-inverted text-sm font-bold p-2 rounded-lg">{formatAge(calculateAge(userData.data.birthdate))}</div>
             <div className="bg-accent-primary-hover text-text-inverted text-sm font-bold p-2 rounded-lg">{userData.data.gender}</div>
             <div className="flex flex-1 items-center justify-between text-lg font-medium text-text-primary border-b border-border-primary pb-1 uppercase">
               <span className="flex-1 text-center text-text-inverted">{userData.data.name}</span>
