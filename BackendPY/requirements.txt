@@ -1,7 +1,0 @@
-fastapi
-uvicorn[standard]
-sqlalchemy
-passlib[argon2]
-python-multipart
-pyjwt
-python-jose[cryptography]
