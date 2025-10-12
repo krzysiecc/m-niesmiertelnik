@@ -12,12 +12,18 @@ import MedicalInfoForm from "./pages/MedicalInfoForm";
 import Mobile from "./pages/Mobile";
 import Settings from "./pages/Settings";
 
-// Layout & Auth Imports
-import { ResponsiveLayout } from "./components/layout/ResponseLayout";
-import { OnboardingLayout } from "./components/layout/OnboardingLayout"; // Import the new layout
-import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+// === 1. Import the real health pages ===
+import ChronicDiseases from "./pages/Chronic";
+import Medications from "./pages/Medications";
+import Allergies from "./pages/Allergies";
 
-// Placeholder component
+// Layout, Auth, and Data Provider Imports
+import { ResponsiveLayout } from "./components/layout/ResponseLayout";
+import { OnboardingLayout } from "./components/layout/OnboardingLayout";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import { ProfileDataProvider } from "./context/ProfileDataContext"; // Import the data provider
+
+// Placeholder component (still useful for pages not yet built)
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="bg-background-secondary p-8 rounded-xl border border-border-primary">
     <h1 className="text-2xl font-bold text-text-primary">{title}</h1>
@@ -40,24 +46,34 @@ function App() {
       {/* --- Group 2: Protected Routes (Require Login) --- */}
       <Route element={<ProtectedRoute />}>
         
-        {/* Sub-Group A: The Onboarding Form Route with its special layout */}
-        <Route element={<OnboardingLayout />}>
-          <Route path="/form" element={<MedicalInfoForm />} />
-        </Route>
+        {/* === 2. Wrap all protected routes with the data provider === */}
+        {/* This fetches user data ONCE after login and makes it available to all nested routes. */}
+        <ProfileDataProvider>
+          
+          {/* Sub-Group A: The Onboarding Form Route */}
+          <Route element={<OnboardingLayout />}>
+            <Route path="/form" element={<MedicalInfoForm />} />
+          </Route>
 
-        {/* Sub-Group B: The Main Dashboard Routes with the full responsive layout */}
-        <Route element={<ResponsiveLayout />}>
-          <Route path="/dashboard" element={<Navigate to="/dashboard/basic" replace />} />
-          <Route path="/dashboard/basic" element={<Dashboard />} />
-          <Route path="/dashboard/health" element={<Navigate to="/dashboard/health/conditions" replace />} />
-          <Route path="/dashboard/health/conditions" element={<PlaceholderPage title="Choroby przewlekłe" />} />
-          <Route path="/dashboard/health/medications" element={<PlaceholderPage title="Przyjmowane leki" />} />
-          <Route path="/dashboard/health/allergies" element={<PlaceholderPage title="Alergie" />} />
-          <Route path="/dashboard/products" element={<Navigate to="/dashboard/products/nfc" replace />} />
-          <Route path="/dashboard/products/nfc" element={<PlaceholderPage title="Opaska ratunkowa NFC" />} />
-          <Route path="/dashboard/settings" element={<Settings />} />
-        </Route>
+          {/* Sub-Group B: The Main Dashboard Routes */}
+          <Route element={<ResponsiveLayout />}>
+            <Route path="/dashboard" element={<Navigate to="/dashboard/basic" replace />} />
+            <Route path="/dashboard/basic" element={<Dashboard />} />
+            
+            <Route path="/dashboard/health" element={<Navigate to="/dashboard/health/conditions" replace />} />
+            
+            {/* === 3. Replace placeholders with the real components === */}
+            <Route path="/dashboard/health/conditions" element={<ChronicDiseases />} />
+            <Route path="/dashboard/health/medications" element={<Medications />} />
+            <Route path="/dashboard/health/allergies" element={<Allergies />} />
+            
+            <Route path="/dashboard/products" element={<Navigate to="/dashboard/products/nfc" replace />} />
+            <Route path="/dashboard/products/nfc" element={<PlaceholderPage title="Opaska ratunkowa NFC" />} />
+            
+            <Route path="/dashboard/settings" element={<Settings />} />
+          </Route>
 
+        </ProfileDataProvider>
       </Route>
     </Routes>
   );
