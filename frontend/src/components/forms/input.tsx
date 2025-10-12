@@ -1,8 +1,7 @@
-
+// src/components/forms/Input.tsx
 import React, { useId } from 'react';
 import type { InputHTMLAttributes } from 'react';
 
-// We extend the standard InputHTMLAttributes to accept all normal input props
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
 }
