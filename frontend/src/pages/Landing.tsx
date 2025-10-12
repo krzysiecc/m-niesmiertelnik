@@ -78,7 +78,17 @@ export default function Landing() {
         {/* Headline */}
         <motion.h1 className="text-5xl md:text-7xl font-bold mb-4 text-text-primary leading-tight flex gap-x-2 md:gap-x-4" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.3 } } }} initial="hidden" animate="visible">
           {["skanujesz", "=", "ratujesz"].map((word, index) => (
-            <div key={index} style={{ overflow: 'hidden' }}><motion.span className="inline-block" variants={{ hidden: { y: "100%", opacity: 0 }, visible: { y: "0%", opacity: 1 } }} transition={{ duration: 0.6, ease: "easeOut" }}>{word}</motion.span></div>
+            <div key={index} style={{ overflow: 'hidden' }}>
+              <motion.span 
+                // === THIS IS THE ONLY CHANGE ===
+                // We use a template literal to add 'text-accent-primary' only if the word is 'ratujesz'
+                className={`inline-block transition-colors duration-300 ${word === 'ratujesz' ? 'text-accent-primary' : ''}`} 
+                variants={{ hidden: { y: "100%", opacity: 0 }, visible: { y: "0%", opacity: 1 } }} 
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
+                {word}
+              </motion.span>
+            </div>
           ))}
         </motion.h1>
 
