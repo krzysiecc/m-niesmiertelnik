@@ -1,5 +1,4 @@
 
-import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 // === 3. ICON LOGIC: Import the icons ===
@@ -106,7 +105,7 @@ export default function Landing() {
                 return (
                   <motion.span
                     key={wordIndex}
-                    variants={wordVariants}
+                    variants={wordVariants as any}
                     className={`inline-block ${
                       isEmphasized
                         ? 'text-text-secondary font-extrabold' // Emphasized with blue color
