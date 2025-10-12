@@ -1,5 +1,5 @@
 // App.tsx
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
 
 // Page Imports
@@ -23,6 +23,13 @@ import { OnboardingLayout } from "./components/layout/OnboardingLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { ProfileDataProvider } from "./context/ProfileDataContext"; // Import the data provider
 
+// Wrapper that allows using ProfileDataProvider as a Route element
+const ProfileDataWrapper = () => (
+  <ProfileDataProvider>
+    <Outlet />
+  </ProfileDataProvider>
+);
+
 // Placeholder component (still useful for pages not yet built)
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="bg-background-secondary p-8 rounded-xl border border-border-primary">
@@ -45,11 +52,9 @@ function App() {
 
       {/* --- Group 2: Protected Routes (Require Login) --- */}
       <Route element={<ProtectedRoute />}>
-        
-        {/* === 2. Wrap all protected routes with the data provider === */}
-        {/* This fetches user data ONCE after login and makes it available to all nested routes. */}
-        <ProfileDataProvider>
-          
+        {/* Use a Route whose element wraps children in ProfileDataProvider via Outlet */}
+        <Route element={<ProfileDataWrapper />}>
+
           {/* Sub-Group A: The Onboarding Form Route */}
           <Route element={<OnboardingLayout />}>
             <Route path="/form" element={<MedicalInfoForm />} />
@@ -73,7 +78,7 @@ function App() {
             <Route path="/dashboard/settings" element={<Settings />} />
           </Route>
 
-        </ProfileDataProvider>
+        </Route>
       </Route>
     </Routes>
   );
