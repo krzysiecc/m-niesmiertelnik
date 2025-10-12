@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Input } from '../components/forms/Input';
+import { useAuth } from "../context/AuthContext";
+
 
 type TrustedContact = {
   fullName: string;
@@ -10,6 +12,7 @@ type TrustedContact = {
 };
 
 type FormData = {
+  userId: string;
   bloodType: string;
   birthdate: string; // DD.MM.RRRR
   name: string;
@@ -18,6 +21,7 @@ type FormData = {
   allergies: string[];
   permanentMedications: string[];
   trustedContacts: TrustedContact[];
+  is_blocked: boolean;
 };
 
 const toIsoFromPl = (pl: string): string => {
@@ -43,8 +47,11 @@ const todayIso = () => {
 
 export default function Login() {
   const navigate = useNavigate();
+    const { userId } = useAuth();
+  
 
   const [formData, setFormData] = useState<FormData>({
+    userId: userId || '',
     bloodType: '',
     birthdate: '22.01.2004',
     name: '',
@@ -53,6 +60,7 @@ export default function Login() {
     allergies: ['', '', ''],
     permanentMedications: ['', '', ''],
     trustedContacts: [{ fullName: '', phone: '' }], // startowo jeden wiersz
+    is_blocked: false,
   });
 
   const handleChange = (
@@ -111,10 +119,31 @@ export default function Login() {
       return { ...p, trustedContacts: contacts };
     });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Simulating submission. Data:', JSON.stringify(formData, null, 2));
-    navigate('/dashboard');
+
+    try {
+      const response = await fetch('https://iteracja-hackathon-1110.onrender.com/generateToken', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(userId && { userId }),
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Błąd logowania. Sprawdź login i hasło.');
+      }
+
+      console.log('Simulating submission. Data:', JSON.stringify(formData, null, 2));
+      navigate('/dashboard');
+    } catch (err) {
+      console.error('Error submitting form:', err);
+      alert('Wystąpił błąd podczas zapisywania danych. Spróbuj ponownie.');
+    }
   };
 
   return (
@@ -365,4 +394,4 @@ export default function Login() {
         </div>
       </motion.div>
   );
-}
+  }
