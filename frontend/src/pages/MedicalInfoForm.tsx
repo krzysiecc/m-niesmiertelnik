@@ -101,9 +101,9 @@ export default function Login() {
         transition={{ duration: 0.5 }}
       >
         <div className="text-center mb-8">
-          <Link to="/">
-            <img src="/logo.png" alt="Logo" className="mx-auto h-16 mb-4" />
-          </Link>
+          
+          <img src="/logo.png" alt="Logo" className="mx-auto h-16 mb-4" />
+          
           <h1 className="text-3xl font-bold text-text-primary">Dane użytkownika</h1>
           <p className="text-text-secondary mt-2">Uzupełnij swoje dane medyczne</p>
         </div>
