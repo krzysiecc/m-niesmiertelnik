@@ -19,6 +19,19 @@ const LoadingSpinner = () => (
   </div>
 );
 
+const calculateAge = (birthDate: string): number => {
+  const today = new Date();
+  const birth = new Date(birthDate);
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  
+  return age;
+};
+
 
 export default function Mobile() {
   
@@ -28,24 +41,45 @@ export default function Mobile() {
   const [userData, setUserData] = useState<any>(null); // Use a proper type/interface in a real app
   const [isLoading, setIsLoading] = useState(true);
 
+  // Pull route params at top-level of component (hooks must not be called inside nested functions)
+  const { token } = useParams<{ token: string }>();
+
+  useEffect(() => {
+    console.log(userData)
+  },[userData])
   // useEffect simulates fetching data once when the component mounts
   useEffect(() => {
-    // In a real app, you would fetch data from your API here
-    // const userId = /* get user ID from URL params */;
-    // fetch(`/api/user/${userId}`).then(...)
-     const { token } = useParams<{ token: string }>();
-    console.log("Scanned token:", token);
+    const fetchData = async () => {
+      // token is available from outer scope
+      try {
+        const decryptResponse = await fetch('https://iteracja-hackathon-1110.onrender.com/decryptToken', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ encrypted_token: token }),
+        });
+        if (!decryptResponse.ok) throw new Error("Nie udało się odszyfrować danych.");
+        const decryptedData = await decryptResponse.json();
+        setUserData(decryptedData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+    
     // Simulating a network request with a timeout
     const timer = setTimeout(() => {
-      setUserData({
-        name: "Jan Kowalski",
-        age: 26,
-        gender: "M",
-        bloodType: "A Rh+",
-        chronicDiseases: ["Astma", "Cukrzyca typu 1", "Nadciśnienie", "Choroba serca", "Wada wzroku"],
-        permanentMedications: ["Insulina", "Salbutamol", "Metformina", "Aspiryna"],
-        allergies: ["Penicylina", "Orzeszki ziemne", "Pyłki traw", "Sierść kota", "Lateks"]
-      });
+      // setUserData({
+      //   name: "Jan Kowalski",
+      //   age: 26,
+      //   gender: "M",
+      //   bloodType: "A Rh+",
+      //   chronicDiseases: ["Astma", "Cukrzyca typu 1", "Nadciśnienie", "Choroba serca", "Wada wzroku"],
+      //   permanentMedications: ["Insulina", "Salbutamol", "Metformina", "Aspiryna"],
+      //   allergies: ["Penicylina", "Orzeszki ziemne", "Pyłki traw", "Sierść kota", "Lateks"]
+      // });
       setIsLoading(false);
     }, 1000); // Simulate 1 second loading time
 
@@ -57,7 +91,7 @@ export default function Mobile() {
     return <LoadingSpinner />;
   }
 
-
+  
   
   // The rest of the component renders only after data is available
   return (
@@ -69,13 +103,13 @@ export default function Mobile() {
         <div className="max-w-md mx-auto p-4 bg-blue-300 rounded-xl border border-border-primary">
           <h2 className="text-sm font-semibold text-text-inverted mb-3">INFORMACJE O OSOBIE</h2>
           <div className="flex items-center gap-4">
-            <div className="bg-accent-primary-hover text-text-invertedtext-sm font-bold p-2 rounded-lg">{formatAge(userData.age)}</div>
-            <div className="bg-accent-primary-hover text-text-inverted text-sm font-bold p-2 rounded-lg">{userData.gender}</div>
+            <div className="bg-accent-primary-hover text-text-invertedtext-sm font-bold p-2 rounded-lg">{formatAge(calculateAge(userData.data.birthdate))}</div>
+            <div className="bg-accent-primary-hover text-text-inverted text-sm font-bold p-2 rounded-lg">{userData.data.gender}</div>
             <div className="flex flex-1 items-center justify-between text-lg font-medium text-text-primary border-b border-border-primary pb-1 uppercase">
-              <span className="flex-1 text-center text-text-inverted">{userData.name}</span>
+              <span className="flex-1 text-center text-text-inverted">{userData.data.name}</span>
               <div className="flex items-center gap-1">
                 <MdBloodtype className="text-accent-primary-hover text-3xl" />
-                <span className='text-text-inverted'>{userData.bloodType}</span>
+                <span className='text-text-inverted'>{userData.data.bloodType}</span>
               </div>
             </div>
           </div>
@@ -87,8 +121,8 @@ export default function Mobile() {
         <div className="max-w-md mx-auto space-y-4 p-4 pb-30">
           <CollapsibleSection title="CHOROBY PRZEWLEKŁE">
             <ul className="list-disc list-inside space-y-2">
-                {userData.chronicDiseases.length > 0 
-                  ? userData.chronicDiseases.map((disease: string) => <li key={disease}>{disease}</li>) 
+                {(Array.isArray(userData.data.chronicDiseases) && userData.data.chronicDiseases.length > 0) 
+                  ? userData.data.chronicDiseases.map((disease: string) => <li key={disease}>{disease}</li>) 
                   : <li className="list-none text-text-secondary">Brak danych</li>
                 }
             </ul>
@@ -96,8 +130,8 @@ export default function Mobile() {
 
           <CollapsibleSection title="LEKI PRZYJMOWANE NA STAŁE">
             <ul className="list-disc list-inside space-y-2">
-                {userData.permanentMedications.length > 0
-                  ? userData.permanentMedications.map((med: string) => <li key={med} >{med}</li>)
+                {(Array.isArray(userData.data.permanentMedications) && userData.data.permanentMedications.length > 0)
+                  ? userData.data.permanentMedications.map((med: string) => <li key={med} >{med}</li>)
                   : <li className="list-none text-text-secondary">Brak danych</li>
                 }
             </ul>
@@ -105,8 +139,8 @@ export default function Mobile() {
 
           <CollapsibleSection title="ALERGIE">
             <ul className="list-disc list-inside space-y-2">
-                {userData.allergies.length > 0
-                  ? userData.allergies.map((allergy: string) => <li key={allergy}>{allergy}</li>)
+                {(Array.isArray(userData.data.allergies) && userData.data.allergies.length > 0)
+                  ? userData.data.allergies.map((allergy: string) => <li key={allergy}>{allergy}</li>)
                   : <li className="list-none text-text-secondary">Brak danych</li>
                 }
             </ul>
