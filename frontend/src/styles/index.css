@@ -73,6 +73,15 @@
     --color-red-800: #fd8da0;
     --color-red-900: #fec6cf;
 
+    --color-green-100: #020f08;
+    --color-green-200: #051e11;
+    --color-green-300: #072d19;
+    --color-green-400: #0a3c22;
+    --color-green-500: #0c4b2a;
+    --color-green-600: #1a7143;
+    --color-green-700: #29975b;
+    --color-green-800: #55b885;
+    --color-green-900: #aaddc2;
   /*
   ==================================================================
     2. LIGHT THEME MAPPING (DEFAULT)
@@ -181,6 +190,16 @@
   --color-red-800: #fd8da0;
   --color-red-900: #fec6cf;
 
+  --color-green-100: #020f08;
+    --color-green-200: #051e11;
+    --color-green-300: #072d19;
+    --color-green-400: #0a3c22;
+    --color-green-500: #0c4b2a;
+    --color-green-600: #1a7143;
+    --color-green-700: #29975b;
+    --color-green-800: #55b885;
+    --color-green-900: #aaddc2;
+    
   /* Semantic Colors (for use in components) */
   --color-background-primary: var(--background-primary);
   --color-background-secondary: var(--background-secondary);
@@ -227,13 +246,13 @@ body {
 }
 
 .scrollbar-hide {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
-}
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+} 
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
+  display: none; 
+} 
 
 .scroll-fade {
   mask-image: linear-gradient(to bottom, transparent 0, black 3%, black 97%, transparent 100%);
