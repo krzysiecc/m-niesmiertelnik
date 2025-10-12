@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Input } from '../components/forms/input';
+import { Input } from '../components/forms/Input';
 
 type TrustedContact = {
   fullName: string;
@@ -118,7 +118,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background-primary p-4">
+    
       <motion.div
         className="w-full max-w-2xl"
         initial={{ opacity: 0, y: -20 }}
@@ -364,6 +364,5 @@ export default function Login() {
           </form>
         </div>
       </motion.div>
-    </div>
   );
 }
