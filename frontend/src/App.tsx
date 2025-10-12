@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import LogoutSuccess from "./pages/LogoutSuccess";
 import MedicalInfoForm from "./pages/MedicalInfoForm";
 import Mobile from "./pages/Mobile";
+import Settings from "./pages/Settings";
 
 // Layout Imports
 // CORRECTED: The component that makes the choice is ResponsiveLayout
@@ -49,7 +50,7 @@ function App() {
         <Route path="/dashboard/products" element={<Navigate to="/dashboard/products/nfc" replace />} />
         <Route path="/dashboard/products/nfc" element={<PlaceholderPage title="Opaska ratunkowa NFC" />} />
         
-        <Route path="/dashboard/settings" element={<PlaceholderPage title="Ustawienia" />} />
+        <Route path="/dashboard/settings" element={<Settings />} />
       </Route>
     </Routes>
   );

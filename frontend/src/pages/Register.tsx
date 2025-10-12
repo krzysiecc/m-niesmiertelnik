@@ -1,45 +1,76 @@
 // src/pages/Register.tsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Input } from '../components/forms/input';
 
 export default function Register() {
+  const navigate = useNavigate();
+  // 1. Update state to match the required API schema
   const [formData, setFormData] = useState({
-    email: '',
+    login: '', // Renamed from 'email'
     password: '',
     confirmPassword: '',
+    first_name: '',
+    last_name: '',
+    date_of_birth: '',
   });
+  
+  // State for loading and error feedback
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // 2. Refactor handleSubmit to send the correct payload
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null); // Clear previous errors
+
+    // Basic client-side validation
     if (formData.password !== formData.confirmPassword) {
-      alert("Hasła nie są zgodne!");
+      setError("Hasła nie są zgodne!");
+      return;
+    }
+    if (formData.password.length < 8) {
+      setError("Hasło musi mieć co najmniej 8 znaków.");
       return;
     }
 
-    // We don't send confirmPassword to the API
+    setIsLoading(true);
+
+    // Create the payload for the API, excluding the confirmPassword field
     const { confirmPassword, ...apiData } = formData;
-    console.log("Submitting to /api/register with JSON:", JSON.stringify(apiData, null, 2));
+    console.log("Submitting to /register with JSON:", JSON.stringify(apiData, null, 2));
     
-    // --- UNCOMMENT TO SEND TO API ---
-    // try {
-    //   const response = await fetch('/api/register', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(apiData),
-    //   });
-    //   const result = await response.json();
-    //   // Handle success (e.g., redirect to login)
-    //   console.log('Success:', result);
-    // } catch (error) {
-    //   // Handle error (e.g., show error message)
-    //   console.error('Error:', error);
-    // }
+    try {
+      const response = await fetch('https://iteracja-hackathon-1110.onrender.com/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(apiData),
+      });
+
+      if (!response.ok) {
+        // Try to parse the error message from the API
+        const errorResult = await response.json();
+        throw new Error(errorResult.message || `Błąd serwera: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      console.log('Success:', result);
+      
+      // On success, notify the user and redirect to the login page
+      alert('Rejestracja zakończona sukcesem! Możesz się teraz zalogować.');
+      navigate('/login');
+
+    } catch (err: any) {
+      console.error('Error:', err);
+      setError(err.message || 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie.');
+    } finally {
+      setIsLoading(false); // Re-enable the button
+    }
   };
   
   const handleEpuapLogin = () => {
@@ -68,15 +99,33 @@ export default function Register() {
         </div>
 
         <div className="bg-background-secondary p-8 rounded-xl border border-border-primary shadow-lg">
+          {/* 3. Update the form with new fields */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            <Input label="Adres e-mail" type="email" name="email" placeholder="twoj@email.com" value={formData.email} onChange={handleChange} required />
-            <Input label="Hasło" type="password" name="password" placeholder="••••••••" value={formData.password} onChange={handleChange} required />
+            <div className="flex flex-col md:flex-row gap-4">
+              <Input label="Imię" type="text" name="first_name" placeholder="Jan" value={formData.first_name} onChange={handleChange} required />
+              <Input label="Nazwisko" type="text" name="last_name" placeholder="Kowalski" value={formData.last_name} onChange={handleChange} required />
+            </div>
+            <Input label="Data urodzenia" type="date" name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} required />
+            <Input label="Adres e-mail (login)" type="email" name="login" placeholder="twoj@email.com" value={formData.login} onChange={handleChange} required />
+            <Input label="Hasło (min. 8 znaków)" type="password" name="password" placeholder="••••••••" value={formData.password} onChange={handleChange} required />
             <Input label="Potwierdź hasło" type="password" name="confirmPassword" placeholder="••••••••" value={formData.confirmPassword} onChange={handleChange} required />
             
+            {/* Display error message if it exists */}
+            {error && (
+              <div className="text-center p-3 bg-accent-primary/20 rounded-lg">
+                <p className="text-sm text-accent-primary font-semibold">{error}</p>
+                <Link to="/" className="text-xs text-text-secondary hover:underline mt-2 inline-block">
+                  Wróć na stronę główną
+                </Link>
+              </div>
+            )}
+
             <button
               type="submit"
-              className="w-full px-4 py-3 bg-accent-primary hover:bg-accent-primary-hover text-on-accent font-bold rounded-lg transition-transform hover:scale-105 cursor-pointer">
-              Zarejestruj się
+              disabled={isLoading} // Disable button while loading
+              className="w-full px-4 py-3 bg-accent-primary hover:bg-accent-primary-hover text-on-accent font-bold rounded-lg transition-transform hover:scale-105 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? 'Rejestrowanie...' : 'Zarejestruj się'}
             </button>
           </form>
           

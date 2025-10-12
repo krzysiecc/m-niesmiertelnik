@@ -1,5 +1,5 @@
 // src/pages/Mobile.tsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { MdBloodtype } from "react-icons/md";
 import { CollapsibleSection } from '../components/mobile/CollapsibleSection';
 import { ActionButtons } from '../components/mobile/ActionButtons';

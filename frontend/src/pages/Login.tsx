@@ -1,11 +1,13 @@
-// src/pages/Login.tsx
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Input } from '../components/forms/input';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const navigate = useNavigate(); 
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     login: '',
     password: '',
@@ -21,17 +23,31 @@ export default function Login() {
       console.log("Submitting to /api/login with JSON:", JSON.stringify(formData, null, 2));
 
       try {
-        const response = await fetch('https://iteracja-hackathon-1110.onrender.com/login', {
+        const response = await fetch('https://iteracja-hackathon-1110.onrender.com/login', { 
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),
         });
         const result = await response.json();
-        console.log('Success:', result);
-        navigate('/dashboard'); 
+
+        if (!response.ok) {
+          throw new Error(result.message || 'Błąd logowania');
+        }
+
+        // **THIS IS THE KEY CHANGE**
+        // Assuming your API returns an object like { ..., user_id: "some_id" }
+        if (result.user_id) {
+          login(result.user_id); // Store the user ID in our context
+          console.log('Login Success:', result);
+          navigate('/dashboard'); // Redirect to dashboard
+        } else {
+          throw new Error("API did not return a user_id.");
+        }
       } catch (error) {
         console.error('Error:', error);
+        // You can add an error state here to show on the form
       }
+
     };
 
   

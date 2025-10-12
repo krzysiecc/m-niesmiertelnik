@@ -6,12 +6,15 @@ import App from './App.tsx'
 import './styles/index.css'
 
 import { ThemeProvider } from './context/ThemeProvider.tsx'; // Import the provider
+import { AuthProvider } from './context/AuthContext.tsx'; // Import the AuthProvider
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider> {/* Wrap the App */}
-        <App />
+      <ThemeProvider>
+        <AuthProvider> {/* Wrap the App */}
+          <App />
+        </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,
