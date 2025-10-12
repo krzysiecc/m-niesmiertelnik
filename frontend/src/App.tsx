@@ -9,8 +9,12 @@ import Mobile from "./components/mobile/MobileView";
 import { BasicLayout } from "./components/layout/BasicLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+<<<<<<< Updated upstream
 import LogoutSuccess from "./pages/LogoutSuccess";
 
+=======
+import MedicalInfoForm from "./pages/MedicalInfoForm"
+>>>>>>> Stashed changes
 // Placeholder component for other pages
 const PlaceholderPage = ({ title }) => (
   <div className="bg-background-secondary p-8 rounded-xl border border-border-primary">
@@ -28,12 +32,15 @@ function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+<<<<<<< Updated upstream
       <Route path="/logout-success" element={<LogoutSuccess />} />
 
+=======
+      <Route path="/form" element={<MedicalInfoForm/>}/>
+>>>>>>> Stashed changes
       <Route element={<BasicLayout />}>
         {/* Redirect /dashboard to the main dashboard view */}
         <Route path="/dashboard" element={<Navigate to="/dashboard/basic" replace />} />
-        
         <Route path="/dashboard/basic" element={<Dashboard />} />
         <Route path="/dashboard/health" element={<PlaceholderPage title="Dane Zdrowotne" />} />
         <Route path="/dashboard/health/conditions" element={<PlaceholderPage title="Choroby przewlekłe" />} />

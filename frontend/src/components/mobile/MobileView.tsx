@@ -27,31 +27,33 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, children
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className="bg-gray-800 rounded-xl overflow-hidden border border-blue-500">
+    <div className="bg-gray-800 rounded-xl overflow-hidden ring-1 ring-blue-500 bg-clip-padding">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-blue-500 flex justify-between items-center p-4 text-left"
+        className="w-full bg-blue-500 flex justify-between items-center p-4 text-left rounded-t-xl focus:outline-none focus-visible:outline-none"
         aria-expanded={isOpen}
       >
-        <h3 className="text-lg font-bold text-white-500">{title}</h3>
+        <h3 className="text-lg font-bold text-white">{title}</h3>
         <ChevronIcon isOpen={isOpen} />
       </button>
 
-      {/* Kontener do animacji z użyciem CSS grid */}
+      {/* Animujemy tylko wysokość (grid-rows) */}
       <div
-        className={`grid overflow-hidden transition-all duration-500 ease-in-out ${
-          isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+        className={`grid overflow-hidden bg-gray-800 transition-[grid-template-rows] duration-400 ease-out ${
+          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
         }`}
       >
-        <div className="overflow-hidden"> {/* Ten div jest potrzebny, aby uniknąć "ściskania" treści w trakcie animacji */}
-          <div className="p-4 border-t font-extrabold uppercase border-gray-700">
-            <div className="text-blue-500">{children}</div>
+        <div className="overflow-hidden">
+          {/* UWAGA: żadnego jasnego borderu! */}
+          <div className="-mt-px bg-gray-800 p-4 rounded-b-xl /* border-t border-transparent */ font-extrabold uppercase text-blue-500">
+            {children}
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 
 // Główny komponent widoku
