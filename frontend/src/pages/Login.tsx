@@ -7,7 +7,7 @@ import { Input } from '../components/forms/input';
 export default function Login() {
   const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
-    email: '',
+    login: '',
     password: '',
   });
 
@@ -15,35 +15,24 @@ export default function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Simulating login and redirecting to dashboard. Data:", JSON.stringify(formData, null, 2));
 
-    // Immediately navigate to the dashboard, skipping the API call
-    navigate('/dashboard');
-
-    // The actual API call remains commented out for future use
-    /*
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       console.log("Submitting to /api/login with JSON:", JSON.stringify(formData, null, 2));
 
       try {
-        const response = await fetch('/api/login', {
+        const response = await fetch('https://iteracja-hackathon-1110.onrender.com/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),
         });
         const result = await response.json();
         console.log('Success:', result);
-        // On success, you would navigate here
-        // navigate('/dashboard'); 
+        navigate('/dashboard'); 
       } catch (error) {
         console.error('Error:', error);
       }
     };
-    */
-  };
 
   
   const handleEpuapLogin = () => {
@@ -76,9 +65,9 @@ export default function Login() {
             <Input
               label="Adres e-mail"
               type="email"
-              name="email"
+              name="login"
               placeholder="twoj@email.com"
-              value={formData.email}
+              value={formData.login}
               onChange={handleChange}
               required
             />
