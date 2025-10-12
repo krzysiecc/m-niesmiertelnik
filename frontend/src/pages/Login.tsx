@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Input } from '../components/forms/Input';
+import { Input } from '../components/forms/input';
 import { useAuth } from '../context/AuthContext'; // Corrected path to plural contexts
 
 export default function Login() {
