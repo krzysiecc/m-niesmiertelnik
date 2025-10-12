@@ -2,21 +2,25 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Input } from '../components/forms/Input';
+import { Input } from '../components/forms/input';
+
+type TrustedContact = {
+  fullName: string;
+  phone: string;
+};
 
 type FormData = {
   bloodType: string;
-  birthdate: string; // w stanie zawsze DD.MM.RRRR
+  birthdate: string; // DD.MM.RRRR
   name: string;
   gender: 'M' | 'F' | 'O';
   chronicDiseases: string[];
   allergies: string[];
   permanentMedications: string[];
+  trustedContacts: TrustedContact[];
 };
 
-// helpery konwersji: DD.MM.RRRR <-> YYYY-MM-DD
 const toIsoFromPl = (pl: string): string => {
-  // oczekuje "DD.MM.RRRR"
   const m = pl.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
   if (!m) return '';
   const [, dd, mm, yyyy] = m;
@@ -24,14 +28,12 @@ const toIsoFromPl = (pl: string): string => {
 };
 
 const toPlFromIso = (iso: string): string => {
-  // oczekuje "YYYY-MM-DD"
   const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (!m) return '';
   const [, yyyy, mm, dd] = m;
   return `${dd}.${mm}.${yyyy}`;
 };
 
-// dzisiejsza data jako ISO do atrybutu max
 const todayIso = () => {
   const d = new Date();
   const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -44,12 +46,12 @@ export default function Login() {
 
   const [formData, setFormData] = useState<FormData>({
     bloodType: '',
-    birthdate: '22.01.2004',   // stan w PL formacie
+    birthdate: '22.01.2004',
     name: '',
-    gender: '',
-    chronicDiseases: [''],
-    allergies: [''],
-    permanentMedications: [''],
+    gender: 'M',
+    chronicDiseases: ['', '', ''],
+    allergies: ['', '', ''],
+    permanentMedications: ['', '', ''],
     trustedContacts: [{ fullName: '', phone: '' }], // startowo jeden wiersz
   });
 
@@ -85,15 +87,38 @@ export default function Login() {
       return { ...p, [field]: arr };
     });
 
+  // --- Zaufane kontakty ---
+  const handleContactChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+    key: keyof TrustedContact
+  ) => {
+    const { value } = e.target;
+    setFormData((prev) => {
+      const contacts = [...prev.trustedContacts];
+      contacts[index] = { ...contacts[index], [key]: value };
+      return { ...prev, trustedContacts: contacts };
+    });
+  };
+
+  const addContact = () =>
+    setFormData((p) => ({ ...p, trustedContacts: [...p.trustedContacts, { fullName: '', phone: '' }] }));
+
+  const removeContact = (index: number) =>
+    setFormData((p) => {
+      const contacts =
+        p.trustedContacts.length > 1 ? p.trustedContacts.filter((_, i) => i !== index) : p.trustedContacts;
+      return { ...p, trustedContacts: contacts };
+    });
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // birthdate pozostaje w formacie DD.MM.RRRR
     console.log('Simulating submission. Data:', JSON.stringify(formData, null, 2));
-    sessionStorage.setItem('formData', JSON.stringify(formData));
     navigate('/dashboard');
   };
 
   return (
+    <div className="min-h-screen flex items-center justify-center bg-background-primary p-4">
       <motion.div
         className="w-full max-w-2xl"
         initial={{ opacity: 0, y: -20 }}
@@ -101,9 +126,9 @@ export default function Login() {
         transition={{ duration: 0.5 }}
       >
         <div className="text-center mb-8">
-          
-          <img src="/logo.png" alt="Logo" className="mx-auto h-16 mb-4" />
-          
+          <Link to="/">
+            <img src="/logo.png" alt="Logo" className="mx-auto h-16 mb-4" />
+          </Link>
           <h1 className="text-3xl font-bold text-text-primary">Dane użytkownika</h1>
           <p className="text-text-secondary mt-2">Uzupełnij swoje dane medyczne</p>
         </div>
@@ -120,14 +145,13 @@ export default function Login() {
               required
             />
 
-            {/* Date picker z zachowaniem stylu i konwersją formatu */}
+            {/* Date picker */}
             <div>
-              <label className="block mb-2 text-m font-medium text-text-secondary">
+              <label className="block mb-2 text-sm font-medium text-text-secondary">
                 Data urodzenia
               </label>
               <input
                 type="date"
-                // pokazujemy wartość w ISO, stan trzymamy w PL
                 value={toIsoFromPl(formData.birthdate)}
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -145,7 +169,7 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block mb-2 text-m font-medium text-text-secondary">Płeć</label>
+              <label className="block mb-2 text-sm font-medium text-text-secondary">Płeć</label>
               <select
                 name="gender"
                 value={formData.gender}
@@ -170,7 +194,7 @@ export default function Login() {
             {/* Choroby przewlekłe */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xl font-medium text-text-secondary">Choroby przewlekłe</label>
+                <label className="text-sm font-medium text-text-secondary">Choroby przewlekłe</label>
                 <button
                   type="button"
                   onClick={() => addArrayItem('chronicDiseases')}
@@ -208,7 +232,7 @@ export default function Login() {
             {/* Alergie */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xl font-medium text-text-secondary">Alergie</label>
+                <label className="text-sm font-medium text-text-secondary">Alergie</label>
                 <button
                   type="button"
                   onClick={() => addArrayItem('allergies')}
@@ -246,7 +270,7 @@ export default function Login() {
             {/* Leki stałe */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xl font-medium text-text-secondary">Leki przyjmowane na stałe</label>
+                <label className="text-sm font-medium text-text-secondary">Leki przyjmowane na stałe</label>
                 <button
                   type="button"
                   onClick={() => addArrayItem('permanentMedications')}
@@ -284,7 +308,7 @@ export default function Login() {
             {/* Zaufane kontakty */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xl font-medium text-text-secondary">Zaufane kontakty</label>
+                <label className="text-sm font-medium text-text-secondary">Zaufane kontakty</label>
                 <button
                   type="button"
                   onClick={addContact}
@@ -340,5 +364,6 @@ export default function Login() {
           </form>
         </div>
       </motion.div>
+    </div>
   );
 }
