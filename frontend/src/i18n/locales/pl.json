@@ -1,0 +1,192 @@
+{
+  "common": {
+    "appName": "mNieśmiertelnik",
+    "loading": "Ładowanie...",
+    "loadingData": "Ładowanie danych...",
+    "noData": "Brak danych.",
+    "noDataShort": "Brak danych",
+    "noProfileData": "Brak danych profilowych.",
+    "noItems": "Brak dodanych pozycji.",
+    "notProvided": "Nie uzupełniono",
+    "add": "Dodaj",
+    "addRow": "Dodaj wiersz",
+    "delete": "Usuń",
+    "cancel": "Anuluj",
+    "backHome": "Wróć na stronę główną",
+    "continueWith": "Lub kontynuuj z",
+    "trustedProfile": "Profil Zaufany"
+  },
+  "language": {
+    "switch": "Zmień język",
+    "pl": "Polski",
+    "en": "English"
+  },
+  "nav": {
+    "panel": "Panel",
+    "myPanel": "Mój Panel",
+    "basicData": "DANE PODSTAWOWE",
+    "healthData": "DANE ZDROWOTNE",
+    "chronicDiseases": "Choroby przewlekłe",
+    "medications": "Przyjmowane leki",
+    "allergies": "Alergie",
+    "products": "PRODUKTY",
+    "nfcBand": "Opaska NFC",
+    "settings": "USTAWIENIA",
+    "collapse": "Zwiń",
+    "logout": "Wyloguj się"
+  },
+  "landing": {
+    "sloganWords": ["skanujesz", "=", "ratujesz"],
+    "sloganHighlight": "ratujesz",
+    "subheadlineLines": [
+      "Cyfrowy mNieśmiertelnik gwarantujący",
+      "błyskawiczny dostęp do Twoich danych",
+      "medycznych w nagłych wypadkach."
+    ],
+    "emphasizedWords": ["mNieśmiertelnik", "dostęp", "Twoich", "medycznych", "nagłych"],
+    "register": "Rejestracja",
+    "login": "Zaloguj się",
+    "howItWorks": "Jak to działa?",
+    "steps": [
+      {
+        "title": "Stwórz swój profil osobowy",
+        "desc": "Wprowadź wszelkie informacje, które chcesz udostępnić w nagłym wypadku."
+      },
+      {
+        "title": "Odbierz identyfikator QR",
+        "desc": "Wygeneruj unikalny kod QR na telefon lub połącz z opaską NFC."
+      },
+      {
+        "title": "Trzymaj przy sobie swój własny mNieśmiertelnik",
+        "desc": "W trudnej sytuacji każdy może zeskanować kod, by natychmiast zobaczyć Twoją kartę informacyjną."
+      }
+    ],
+    "epuapHeadline": "Dane uaktualniane na bieżąco, dzięki pełnemu wsparciu serwisu ePUAP",
+    "freeUsage": "Korzystanie z usług mNieśmiertelnika jest całkowicie darmowe.",
+    "freeUsageNfc": "Opłaty obowiązują po zamówieniu opaski identyfikującej NFC.",
+    "joinNow": "Dołącz teraz",
+    "rightsReserved": "Wszelkie prawa zastrzeżone.",
+    "terms": "Warunki użytkowania",
+    "privacy": "Polityka Prywatności"
+  },
+  "login": {
+    "title": "Zaloguj się",
+    "noAccount": "Nie masz konta?",
+    "registerLink": "Zarejestruj się",
+    "email": "Adres e-mail",
+    "password": "Hasło",
+    "submit": "Zaloguj się",
+    "submitting": "Logowanie...",
+    "error": "Błąd logowania. Sprawdź login i hasło.",
+    "noUserId": "Odpowiedź serwera nie zawiera ID użytkownika.",
+    "epuapNotImplemented": "Logowanie przez ePUAP nie jest jeszcze zaimplementowane."
+  },
+  "register": {
+    "title": "Stwórz nowe konto",
+    "haveAccount": "Masz już konto?",
+    "loginLink": "Zaloguj się",
+    "email": "Adres e-mail (login)",
+    "password": "Hasło (min. 8 znaków)",
+    "confirmPassword": "Potwierdź hasło",
+    "submit": "Zarejestruj się",
+    "submitting": "Rejestrowanie...",
+    "passwordMismatch": "Hasła nie są zgodne!",
+    "passwordTooShort": "Hasło musi mieć co najmniej 8 znaków.",
+    "serverError": "Błąd serwera: {{status}}",
+    "success": "Rejestracja zakończona! Teraz uzupełnij swoje dane medyczne.",
+    "noUserId": "Rejestracja udana, ale serwer nie zwrócił ID użytkownika. Skontaktuj się z pomocą techniczną.",
+    "unexpectedError": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie.",
+    "epuapNotImplemented": "Rejestracja przez ePUAP nie jest jeszcze zaimplementowana."
+  },
+  "logout": {
+    "title": "Wylogowano pomyślnie",
+    "message": "Twoja sesja została bezpiecznie zakończona. Zapraszamy ponownie!",
+    "backHome": "Wróć na stronę główną",
+    "loginAgain": "Zaloguj się ponownie"
+  },
+  "form": {
+    "title": "Dane użytkownika",
+    "subtitle": "Uzupełnij swoje dane medyczne",
+    "name": "Imię i nazwisko",
+    "namePlaceholder": "Jan Kowalski",
+    "birthDate": "Data urodzenia",
+    "birthDateSaved": "Zapis: {{date}} (DD.MM.RRRR)",
+    "gender": "Płeć",
+    "genderMale": "Mężczyzna",
+    "genderFemale": "Kobieta",
+    "genderOther": "Inna / Nie chcę podawać",
+    "bloodType": "Grupa krwi",
+    "bloodTypePlaceholder": "np. 0 Rh+",
+    "chronicDiseases": "Choroby przewlekłe",
+    "diseaseLabel": "Choroba {{index}}",
+    "diseasePlaceholder": "np. Cukrzyca typu 1",
+    "removeDisease": "Usuń chorobę {{index}}",
+    "allergies": "Alergie",
+    "allergyLabel": "Alergia {{index}}",
+    "allergyPlaceholder": "np. Pyłki traw",
+    "removeAllergy": "Usuń alergię {{index}}",
+    "medications": "Leki przyjmowane na stałe",
+    "medicationLabel": "Lek {{index}}",
+    "medicationPlaceholder": "np. Metformina",
+    "removeMedication": "Usuń lek {{index}}",
+    "trustedContacts": "Zaufane kontakty",
+    "contactNameLabel": "Imię i nazwisko {{index}}",
+    "contactNamePlaceholder": "np. Anna Nowak",
+    "phone": "Telefon",
+    "phonePlaceholder": "+48 600 000 000",
+    "removeContact": "Usuń kontakt {{index}}",
+    "save": "Zapisz dane",
+    "saveError": "Błąd zapisywania danych. Spróbuj ponownie.",
+    "saveSuccess": "Profil zaktualizowany! Teraz możesz się zalogować."
+  },
+  "dashboard": {
+    "qrTitle": "Twój identyfikator QR",
+    "qrHint": "Zeskanuj, aby zobaczyć kartę informacyjną.",
+    "qrHintWallpaper": "Ustaw jako tapetę w telefonie.",
+    "qrDownload": "Pobierz PNG",
+    "noName": "Brak Imienia i Nazwiska",
+    "userId": "ID Użytkownika: {{id}}",
+    "birthDate": "Data urodzenia",
+    "bloodType": "Grupa krwi",
+    "iceTitle": "Kontakt w Nagłym Wypadku (ICE)",
+    "noIce": "Nie dodano żadnych kontaktów ICE.",
+    "regenerateQr": "Zablokuj i wygeneruj nowy kod QR",
+    "regenerateHint": "Użyj w przypadku zgubienia telefonu lub udostępnienia kodu niepowołanym osobom.",
+    "healthChronicTitle": "Choroby Przewlekłe",
+    "healthChronicPlaceholder": "np. Astma",
+    "healthMedicationsTitle": "Leki Przyjmowane na Stałe",
+    "healthMedicationsPlaceholder": "np. Metformina 500mg",
+    "healthAllergiesTitle": "Alergie",
+    "healthAllergiesPlaceholder": "np. Pyłki traw"
+  },
+  "mobile": {
+    "personInfo": "INFORMACJE O OSOBIE",
+    "chronicDiseases": "CHOROBY PRZEWLEKŁE",
+    "medications": "LEKI PRZYJMOWANE NA STAŁE",
+    "allergies": "ALERGIE",
+    "notifyIce": "POWIADOM ICE",
+    "age_one": "{{count}} rok",
+    "age_few": "{{count}} lata",
+    "age_many": "{{count}} lat",
+    "age_other": "{{count}} lat"
+  },
+  "settings": {
+    "title": "Ustawienia Konta",
+    "dangerZone": "Strefa Niebezpieczna",
+    "deleteWarning": "Usunięcie konta jest operacją nieodwracalną. Wszystkie Twoje dane, w tym informacje medyczne i wygenerowane kody QR, zostaną trwale usunięte.",
+    "deleteButton": "Usuń Moje Konto",
+    "confirmTitle": "Czy na pewno?",
+    "confirmMessage": "Ta akcja jest nieodwracalna. Czy na pewno chcesz trwale usunąć swoje konto?",
+    "confirmDelete": "Tak, usuń konto",
+    "deleting": "Usuwanie...",
+    "noUserId": "Błąd: Brak ID użytkownika.",
+    "deleteFailed": "Nie udało się usunąć konta. Spróbuj ponownie.",
+    "deleteSuccess": "Twoje konto zostało pomyślnie usunięte."
+  },
+  "errors": {
+    "fetchUserFailed": "Nie udało się pobrać danych użytkownika.",
+    "noToken": "Odpowiedź serwera nie zawiera tokenu.",
+    "decryptFailed": "Nie udało się odszyfrować danych.",
+    "unexpected": "Wystąpił nieoczekiwany błąd."
+  }
+}

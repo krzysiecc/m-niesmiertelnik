@@ -1,5 +1,5 @@
-// src/contexts/ThemeProvider.tsx
-import React, { createContext, useContext, useState, useEffect } from 'react';
+// src/context/ThemeProvider.tsx
+import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 
 type Theme = 'dark' | 'light';
@@ -36,7 +36,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom hook for easy access to the theme context
+// Custom hook for easy access to the theme context (co-located with its provider).
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
   if (!context) {

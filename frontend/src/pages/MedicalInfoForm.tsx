@@ -1,28 +1,14 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Input } from '../components/forms/input';
-import { useAuth } from "../context/AuthContext";
+import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+import { Input } from '../components/forms/Input';
+import { useAuth } from '../context/AuthContext';
+import { authFetch } from '../lib/api';
+import type { TrustedContact, UserProfileData } from '../types';
 
-
-type TrustedContact = {
-  fullName: string;
-  phone: string;
-};
-
-type FormData = {
-  userId: string;
-  bloodType: string;
-  birthdate: string; // DD.MM.RRRR
-  name: string;
-  gender: 'M' | 'F' | 'O';
-  chronicDiseases: string[];
-  allergies: string[];
-  permanentMedications: string[];
-  trustedContacts: TrustedContact[];
-  is_blocked: boolean;
-};
+type MedicalForm = UserProfileData;
 
 const toIsoFromPl = (pl: string): string => {
   const m = pl.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
@@ -47,10 +33,10 @@ const todayIso = () => {
 
 export default function MedicalInfoForm() {
   const navigate = useNavigate();
-    const { userId } = useAuth();
-  
+  const { userId } = useAuth();
+  const { t } = useTranslation();
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<MedicalForm>({
     userId: userId || '',
     bloodType: '',
     birthdate: '22.01.2004',
@@ -59,7 +45,7 @@ export default function MedicalInfoForm() {
     chronicDiseases: [''],
     allergies: [''],
     permanentMedications: [''],
-    trustedContacts: [{ fullName: '', phone: '' }], // startowo jeden wiersz
+    trustedContacts: [{ fullName: '', phone: '' }], // start with one row
     is_blocked: false,
   });
 
@@ -67,12 +53,12 @@ export default function MedicalInfoForm() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value } as FormData));
+    setFormData((prev) => ({ ...prev, [name]: value } as MedicalForm));
   };
 
   const handleArrayChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: keyof Pick<FormData, 'chronicDiseases' | 'allergies' | 'permanentMedications'>,
+    field: keyof Pick<MedicalForm, 'chronicDiseases' | 'allergies' | 'permanentMedications'>,
     index: number
   ) => {
     setFormData((prev) => {
@@ -83,11 +69,11 @@ export default function MedicalInfoForm() {
   };
 
   const addArrayItem = (
-    field: keyof Pick<FormData, 'chronicDiseases' | 'allergies' | 'permanentMedications'>
+    field: keyof Pick<MedicalForm, 'chronicDiseases' | 'allergies' | 'permanentMedications'>
   ) => setFormData((p) => ({ ...p, [field]: [...p[field], ''] }));
 
   const removeArrayItem = (
-    field: keyof Pick<FormData, 'chronicDiseases' | 'allergies' | 'permanentMedications'>,
+    field: keyof Pick<MedicalForm, 'chronicDiseases' | 'allergies' | 'permanentMedications'>,
     index: number
   ) =>
     setFormData((p) => {
@@ -95,7 +81,7 @@ export default function MedicalInfoForm() {
       return { ...p, [field]: arr };
     });
 
-  // --- Zaufane kontakty ---
+  // --- Trusted contacts ---
   const handleContactChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
@@ -123,36 +109,27 @@ export default function MedicalInfoForm() {
     e.preventDefault();
 
     try {
-      // Your API call logic is correct
-      const response = await fetch('https://iteracja-hackathon-1110.onrender.com/generateToken', {
+      const response = await authFetch('/generateToken', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(userId && { userId }),
-        },
-        body: JSON.stringify({ ...formData, userId }), // Pass userId in body just in case
+        body: JSON.stringify({ ...formData, userId }),
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || 'Błąd zapisywania danych. Spróbuj ponownie.');
+        throw new Error(result.message || t('form.saveError'));
       }
 
-      console.log('Submission successful. Forcing reload to dashboard...');
+      toast.success(t('form.saveSuccess'));
+      navigate('/login');
 
-      alert('Profil zaktualizowany! Teraz możesz się zalogować.');
-      navigate('/login'); 
-
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error submitting form:', err);
-      alert(err.message);
+      toast.error(err instanceof Error ? err.message : t('form.saveError'));
     }
   };
 
-
   return (
-    
       <motion.div
         className="w-full max-w-2xl"
         initial={{ opacity: 0, y: -20 }}
@@ -163,17 +140,17 @@ export default function MedicalInfoForm() {
           <Link to="/">
             <img src="/logo.png" alt="Logo" className="mx-auto h-16 mb-4" />
           </Link>
-          <h1 className="text-3xl font-bold text-text-primary">Dane użytkownika</h1>
-          <p className="text-text-secondary mt-2">Uzupełnij swoje dane medyczne</p>
+          <h1 className="text-3xl font-bold text-text-primary">{t('form.title')}</h1>
+          <p className="text-text-secondary mt-2">{t('form.subtitle')}</p>
         </div>
 
         <div className="bg-background-secondary p-8 rounded-xl border border-border-primary shadow-lg">
           <form onSubmit={handleSubmit} className="space-y-6">
             <Input
-              label="Imię i nazwisko"
+              label={t('form.name')}
               type="text"
               name="name"
-              placeholder="Jan Kowalski"
+              placeholder={t('form.namePlaceholder')}
               value={formData.name}
               onChange={handleChange}
               required
@@ -182,7 +159,7 @@ export default function MedicalInfoForm() {
             {/* Date picker */}
             <div>
               <label className="block mb-2 text-sm font-medium text-text-secondary">
-                Data urodzenia
+                {t('form.birthDate')}
               </label>
               <input
                 type="date"
@@ -198,43 +175,43 @@ export default function MedicalInfoForm() {
                 className="w-full p-3 border border-border-primary rounded-lg bg-background-tertiary text-text-primary"
               />
               <p className="mt-1 text-xs text-text-secondary">
-                Zapis: {formData.birthdate} (DD.MM.RRRR)
+                {t('form.birthDateSaved', { date: formData.birthdate })}
               </p>
             </div>
 
             <div>
-              <label className="block mb-2 text-sm font-medium text-text-secondary">Płeć</label>
+              <label className="block mb-2 text-sm font-medium text-text-secondary">{t('form.gender')}</label>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
                 className="w-full p-3 border border-border-primary rounded-lg bg-background-tertiary text-text-primary"
               >
-                <option value="M">Mężczyzna</option>
-                <option value="F">Kobieta</option>
-                <option value="O">Inna / Nie chcę podawać</option>
+                <option value="M">{t('form.genderMale')}</option>
+                <option value="F">{t('form.genderFemale')}</option>
+                <option value="O">{t('form.genderOther')}</option>
               </select>
             </div>
 
             <Input
-              label="Grupa krwi"
+              label={t('form.bloodType')}
               type="text"
               name="bloodType"
-              placeholder="np. 0 Rh+"
+              placeholder={t('form.bloodTypePlaceholder')}
               value={formData.bloodType}
               onChange={handleChange}
             />
 
-            {/* Choroby przewlekłe */}
+            {/* Chronic diseases */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-text-secondary">Choroby przewlekłe</label>
+                <label className="text-sm font-medium text-text-secondary">{t('form.chronicDiseases')}</label>
                 <button
                   type="button"
                   onClick={() => addArrayItem('chronicDiseases')}
                   className="px-3 py-1 bg-background-tertiary hover:bg-border-primary border border-border-primary text-text-primary rounded-lg transition"
                 >
-                  Dodaj wiersz
+                  {t('common.addRow')}
                 </button>
               </div>
               <div className="space-y-3">
@@ -242,10 +219,10 @@ export default function MedicalInfoForm() {
                   <div key={`disease-${i}`} className="flex gap-3">
                     <div className="flex-1">
                       <Input
-                        label={`Choroba ${i + 1}`}
+                        label={t('form.diseaseLabel', { index: i + 1 })}
                         type="text"
                         name={`chronicDiseases-${i}`}
-                        placeholder="np. Cukrzyca typu 1"
+                        placeholder={t('form.diseasePlaceholder')}
                         value={disease}
                         onChange={(e) => handleArrayChange(e, 'chronicDiseases', i)}
                       />
@@ -254,25 +231,25 @@ export default function MedicalInfoForm() {
                       type="button"
                       onClick={() => removeArrayItem('chronicDiseases', i)}
                       className="self-end h-11 px-3 bg-background-tertiary hover:bg-border-primary border border-border-primary text-text-primary rounded-lg transition"
-                      aria-label={`Usuń chorobę ${i + 1}`}
+                      aria-label={t('form.removeDisease', { index: i + 1 })}
                     >
-                      Usuń
+                      {t('common.delete')}
                     </button>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Alergie */}
+            {/* Allergies */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-text-secondary">Alergie</label>
+                <label className="text-sm font-medium text-text-secondary">{t('form.allergies')}</label>
                 <button
                   type="button"
                   onClick={() => addArrayItem('allergies')}
                   className="px-3 py-1 bg-background-tertiary hover:bg-border-primary border border-border-primary text-text-primary rounded-lg transition"
                 >
-                  Dodaj wiersz
+                  {t('common.addRow')}
                 </button>
               </div>
               <div className="space-y-3">
@@ -280,10 +257,10 @@ export default function MedicalInfoForm() {
                   <div key={`allergy-${i}`} className="flex gap-3">
                     <div className="flex-1">
                       <Input
-                        label={`Alergia ${i + 1}`}
+                        label={t('form.allergyLabel', { index: i + 1 })}
                         type="text"
                         name={`allergies-${i}`}
-                        placeholder="np. Pyłki traw"
+                        placeholder={t('form.allergyPlaceholder')}
                         value={allergy}
                         onChange={(e) => handleArrayChange(e, 'allergies', i)}
                       />
@@ -292,25 +269,25 @@ export default function MedicalInfoForm() {
                       type="button"
                       onClick={() => removeArrayItem('allergies', i)}
                       className="self-end h-11 px-3 bg-background-tertiary hover:bg-border-primary border border-border-primary text-text-primary rounded-lg transition"
-                      aria-label={`Usuń alergię ${i + 1}`}
+                      aria-label={t('form.removeAllergy', { index: i + 1 })}
                     >
-                      Usuń
+                      {t('common.delete')}
                     </button>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Leki stałe */}
+            {/* Long-term medications */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-text-secondary">Leki przyjmowane na stałe</label>
+                <label className="text-sm font-medium text-text-secondary">{t('form.medications')}</label>
                 <button
                   type="button"
                   onClick={() => addArrayItem('permanentMedications')}
                   className="px-3 py-1 bg-background-tertiary hover:bg-border-primary border border-border-primary text-text-primary rounded-lg transition"
                 >
-                  Dodaj wiersz
+                  {t('common.addRow')}
                 </button>
               </div>
               <div className="space-y-3">
@@ -318,10 +295,10 @@ export default function MedicalInfoForm() {
                   <div key={`med-${i}`} className="flex gap-3">
                     <div className="flex-1">
                       <Input
-                        label={`Lek ${i + 1}`}
+                        label={t('form.medicationLabel', { index: i + 1 })}
                         type="text"
                         name={`permanentMedications-${i}`}
-                        placeholder="np. Metformina"
+                        placeholder={t('form.medicationPlaceholder')}
                         value={med}
                         onChange={(e) => handleArrayChange(e, 'permanentMedications', i)}
                       />
@@ -330,35 +307,35 @@ export default function MedicalInfoForm() {
                       type="button"
                       onClick={() => removeArrayItem('permanentMedications', i)}
                       className="self-end h-11 px-3 bg-background-tertiary hover:bg-border-primary border border-border-primary text-text-primary rounded-lg transition"
-                      aria-label={`Usuń lek ${i + 1}`}
+                      aria-label={t('form.removeMedication', { index: i + 1 })}
                     >
-                      Usuń
+                      {t('common.delete')}
                     </button>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Zaufane kontakty */}
+            {/* Trusted contacts */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-text-secondary">Zaufane kontakty</label>
+                <label className="text-sm font-medium text-text-secondary">{t('form.trustedContacts')}</label>
                 <button
                   type="button"
                   onClick={addContact}
                   className="px-3 py-1 bg-background-tertiary hover:bg-border-primary border border-border-primary text-text-primary rounded-lg transition"
                 >
-                  Dodaj wiersz
+                  {t('common.addRow')}
                 </button>
               </div>
               <div className="space-y-3">
                 {formData.trustedContacts.map((c, i) => (
                   <div key={`contact-${i}`} className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <Input
-                      label={`Imię i nazwisko ${i + 1}`}
+                      label={t('form.contactNameLabel', { index: i + 1 })}
                       type="text"
                       name={`trustedContacts-fullName-${i}`}
-                      placeholder="np. Anna Nowak"
+                      placeholder={t('form.contactNamePlaceholder')}
                       value={c.fullName}
                       onChange={(e) => handleContactChange(e, i, 'fullName')}
                       required
@@ -366,10 +343,10 @@ export default function MedicalInfoForm() {
                     <div className="flex gap-3">
                       <div className="flex-1">
                         <Input
-                          label="Telefon"
+                          label={t('form.phone')}
                           type="tel"
                           name={`trustedContacts-phone-${i}`}
-                          placeholder="+48 600 000 000"
+                          placeholder={t('form.phonePlaceholder')}
                           value={c.phone}
                           onChange={(e) => handleContactChange(e, i, 'phone')}
                           required
@@ -379,9 +356,9 @@ export default function MedicalInfoForm() {
                         type="button"
                         onClick={() => removeContact(i)}
                         className="self-end h-11 px-3 bg-background-tertiary hover:bg-border-primary border border-border-primary text-text-primary rounded-lg transition"
-                        aria-label={`Usuń kontakt ${i + 1}`}
+                        aria-label={t('form.removeContact', { index: i + 1 })}
                       >
-                        Usuń
+                        {t('common.delete')}
                       </button>
                     </div>
                   </div>
@@ -393,10 +370,10 @@ export default function MedicalInfoForm() {
               type="submit"
               className="w-full px-4 py-3 bg-accent-primary hover:bg-accent-primary-hover text-on-accent font-bold rounded-lg transition-transform hover:scale-105 cursor-pointer"
             >
-              Zapisz dane
+              {t('form.save')}
             </button>
           </form>
         </div>
       </motion.div>
   );
-  }
+}

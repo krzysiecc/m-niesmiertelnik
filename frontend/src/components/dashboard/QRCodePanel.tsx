@@ -1,6 +1,7 @@
 // src/components/dashboard/QRCodePanel.tsx
 import { useState, useRef, useLayoutEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
+import { useTranslation } from 'react-i18next';
 // === 1. Import the library we just installed ===
 import { saveSvgAsPng } from 'save-svg-as-png';
 
@@ -9,6 +10,7 @@ interface QRCodePanelProps {
 }
 
 export const QRCodePanel = ({ qrValue }: QRCodePanelProps) => {
+  const { t } = useTranslation();
   const [qrSize, setQrSize] = useState(200);
   const qrContainerRef = useRef<HTMLDivElement>(null);
   // === 2. Create a new ref to specifically target the SVG element ===
@@ -43,7 +45,7 @@ export const QRCodePanel = ({ qrValue }: QRCodePanelProps) => {
 
   return (
     <div className="bg-background-secondary p-6 rounded-xl border border-border-primary flex flex-col items-center gap-4 w-full max-w-xs self-start">
-      <h2 className="text-lg font-semibold text-text-primary">Twój identyfikator QR</h2>
+      <h2 className="text-lg font-semibold text-text-primary">{t('dashboard.qrTitle')}</h2>
       <div ref={qrContainerRef} className="w-full bg-white rounded-lg p-4 aspect-square">
         <QRCodeSVG
           // === 4. Attach the new ref to the SVG component ===
@@ -57,14 +59,14 @@ export const QRCodePanel = ({ qrValue }: QRCodePanelProps) => {
           includeMargin={false}
         />
       </div>
-      <p className="text-xs text-text-secondary text-center">Zeskanuj, aby zobaczyć kartę informacyjną. <br />Ustaw jako tapetę w telefonie.</p>
+      <p className="text-xs text-text-secondary text-center">{t('dashboard.qrHint')} <br />{t('dashboard.qrHintWallpaper')}</p>
       
       {/* === 5. Attach the handler to the button's onClick event === */}
       <button 
         onClick={handleDownload}
         className="w-full mt-2 px-4 py-2 bg-accent-primary hover:bg-accent-primary-hover text-on-accent font-semibold rounded-lg transition-transform hover:scale-105 cursor-pointer"
       >
-        Pobierz PNG
+        {t('dashboard.qrDownload')}
       </button>
     </div>
   );

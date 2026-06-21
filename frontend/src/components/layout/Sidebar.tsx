@@ -1,5 +1,6 @@
 // src/components/layout/Sidebar.tsx
 import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   FaUser, FaHeartbeat, FaBriefcaseMedical, FaPills,
   FaShoppingBag, FaCreditCard, FaCog, FaExclamationTriangle
@@ -7,21 +8,21 @@ import {
 
 import { LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
 
-// This structure stays the same for rendering...
+// Menu structure. `labelKey` is an i18n key resolved at render time.
 const menuItems = [
-  { name: "DANE PODSTAWOWE", icon: <FaUser />, path: "/dashboard/basic" },
-  { name: "DANE ZDROWOTNE", icon: <FaHeartbeat />, path: "/dashboard/health", subItems: [
-    { name: "Choroby przewlekłe", icon: <FaBriefcaseMedical />, path: "/dashboard/health/conditions" },
-    { name: "Przyjmowane leki", icon: <FaPills />, path: "/dashboard/health/medications" },
-    { name: "Alergie", icon: <FaExclamationTriangle />, path: "/dashboard/health/allergies" },
+  { labelKey: "nav.basicData", icon: <FaUser />, path: "/dashboard/basic" },
+  { labelKey: "nav.healthData", icon: <FaHeartbeat />, path: "/dashboard/health", subItems: [
+    { labelKey: "nav.chronicDiseases", icon: <FaBriefcaseMedical />, path: "/dashboard/health/conditions" },
+    { labelKey: "nav.medications", icon: <FaPills />, path: "/dashboard/health/medications" },
+    { labelKey: "nav.allergies", icon: <FaExclamationTriangle />, path: "/dashboard/health/allergies" },
   ]},
-  { name: "PRODUKTY", icon: <FaShoppingBag />, path: "/dashboard/products", subItems: [
-    { name: "Opaska NFC", icon: <FaCreditCard />, path: "/dashboard/products/nfc" },
+  { labelKey: "nav.products", icon: <FaShoppingBag />, path: "/dashboard/products", subItems: [
+    { labelKey: "nav.nfcBand", icon: <FaCreditCard />, path: "/dashboard/products/nfc" },
   ]},
-  { name: "USTAWIENIA", icon: <FaCog />, path: "/dashboard/settings" },
+  { labelKey: "nav.settings", icon: <FaCog />, path: "/dashboard/settings" },
 ];
 
-// ...But we EXPORT a flattened version for searching
+// Flattened version used for path -> title lookups.
 const flattenedMenuItems = menuItems.flatMap(item =>
   item.subItems ? [item, ...item.subItems] : [item]
 );
@@ -31,15 +32,15 @@ interface SidebarProps {
   onToggle: () => void;
 }
 
-
-
-// Add the default dashboard route
-export const pathTitles = {
-  "/dashboard/basic": "Mój Panel", // Changed from /dashboard to be more specific
-  ...Object.fromEntries(flattenedMenuItems.map(item => [item.path, item.name]))
+// Maps a route path to an i18n key (consumed by the Header to show the page title).
+// eslint-disable-next-line react-refresh/only-export-components
+export const pathTitles: Record<string, string> = {
+  "/dashboard/basic": "nav.myPanel",
+  ...Object.fromEntries(flattenedMenuItems.map(item => [item.path, item.labelKey])),
 };
 
 export const Sidebar = ({ isExpanded, onToggle }: SidebarProps) => {
+  const { t } = useTranslation();
   const baseLinkClass = "flex items-center px-4 py-3 rounded-lg transition-colors";
   const activeLinkClass = "bg-accent-primary text-on-accent hover:bg-accent-primary-hover shadow-lg shadow-accent-primary/30";
 
@@ -52,7 +53,7 @@ export const Sidebar = ({ isExpanded, onToggle }: SidebarProps) => {
   return (
     // The width of the aside is now dynamic and animates smoothly
     <aside className={`fixed top-0 left-0 h-screen flex flex-col bg-background-primary border-r border-border-primary transition-all duration-300 ease-in-out ${isExpanded ? 'w-72' : 'w-21'}`}>
-      
+
       <div className={`flex items-center p-6 mb-6 ${!isExpanded && 'justify-center'}`}>
         <img src="/logo.png" alt="Logo" className={`flex-shrink-0 ${isExpanded ? 'h-10' : 'h-8'}`} />
         <div className="overflow-hidden">
@@ -67,14 +68,14 @@ export const Sidebar = ({ isExpanded, onToggle }: SidebarProps) => {
       {/* Main navigation links */}
       <nav className="flex-1 flex flex-col gap-2 px-4">
         {menuItems.map((item) => (
-          <div key={item.name}>
+          <div key={item.path}>
             <NavLink
               to={item.path}
               end={!item.subItems}
-              className={({ isActive }) => 
-                `${baseLinkClass} transition-[padding] duration-300 ${isExpanded ? 'px-4' : 'px-4'} ${
-                  isActive 
-                    ? activeLinkClass 
+              className={({ isActive }) =>
+                `${baseLinkClass} transition-[padding] duration-300 px-4 ${
+                  isActive
+                    ? activeLinkClass
                     : "text-text-secondary hover:bg-background-tertiary"
                 }`
               }
@@ -82,21 +83,21 @@ export const Sidebar = ({ isExpanded, onToggle }: SidebarProps) => {
             >
               <span className="text-xl flex-shrink-0">{item.icon}</span>
               <div className="overflow-hidden">
-                <AnimatedText text={<span className="font-semibold">{item.name}</span>} />
+                <AnimatedText text={<span className="font-semibold">{t(item.labelKey)}</span>} />
               </div>
             </NavLink>
 
-            
+
             {/* Sub-items with a smooth transition */}
             <div className={`transition-all duration-300 ease-in-out grid ${isExpanded && item.subItems ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                 <div className="overflow-hidden">
                 {item.subItems && (
                     <div className="mt-2 flex flex-col gap-2 pl-8 border-l-2 border-border-primary ml-6">
                         {item.subItems.map((sub) => (
-                        <NavLink key={sub.name} to={sub.path} className={({ isActive }) => `${baseLinkClass} text-sm ${isActive ? activeLinkClass : "text-text-secondary"}`}>
+                        <NavLink key={sub.path} to={sub.path} className={({ isActive }) => `${baseLinkClass} text-sm ${isActive ? activeLinkClass : "text-text-secondary"}`}>
                             <span className="text-lg flex-shrink-0">{sub.icon}</span>
                             <div className="overflow-hidden">
-                                <AnimatedText text={<span>{sub.name}</span>}/>
+                                <AnimatedText text={<span>{t(sub.labelKey)}</span>}/>
                             </div>
                         </NavLink>
                         ))}
@@ -107,7 +108,7 @@ export const Sidebar = ({ isExpanded, onToggle }: SidebarProps) => {
           </div>
         ))}
       </nav>
-      
+
       {/* Toggle button at the bottom */}
       <div className="p-4 mt-auto border-t border-border-primary">
           <button
@@ -116,7 +117,7 @@ export const Sidebar = ({ isExpanded, onToggle }: SidebarProps) => {
           >
             <span className="text-xl flex-shrink-0">{isExpanded ? <LuChevronsLeft /> : <LuChevronsRight />}</span>
             <div className="overflow-hidden">
-                <AnimatedText text={<span className="font-semibold">Zwiń</span>} />
+                <AnimatedText text={<span className="font-semibold">{t('nav.collapse')}</span>} />
             </div>
           </button>
       </div>

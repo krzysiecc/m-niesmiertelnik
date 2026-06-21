@@ -1,16 +1,13 @@
 // src/pages/Mobile.tsx
 import { useState, useEffect } from 'react';
 import { MdBloodtype } from "react-icons/md";
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { CollapsibleSection } from '../components/mobile/CollapsibleSection';
 import { ActionButtons } from '../components/mobile/ActionButtons';
-import { useParams } from 'react-router-dom';
-
-// Helper function for Polish age grammar, now co-located in this file
-const formatAge = (age: number) => {
-  if ([12, 13, 14].includes(age % 100)) return `${age} lat`;
-  if ([2, 3, 4].includes(age % 10)) return `${age} lata`;
-  return `${age} lat`;
-};
+import { apiUrl } from '../lib/api';
+import { calculateAge } from '../lib/date';
+import type { DecryptResponse } from '../types';
 
 // A simple spinner for the loading state
 const LoadingSpinner = () => (
@@ -19,172 +16,95 @@ const LoadingSpinner = () => (
   </div>
 );
 
-// const calculateAge = (birthDate: string): number => {
-//   const today = new Date();
-  
-//   const birth = new Date(birthDate);
-//   let age = today.getFullYear() - birth.getFullYear();
-//   const monthDiff = today.getMonth() - birth.getMonth();
-  
-//   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-//     age--;
-//   }
-  
-//   return age;
-// };
-
-const calculateAge = (birthDateString: string): number | null => {
-  // 1. Split the 'dd.mm.yyyy' string into parts
-  const parts = birthDateString.split('.');
-  
-  // 2. Add a safety check in case the format is wrong
-  if (parts.length !== 3) {
-    console.error("Invalid date format received:", birthDateString);
-    return null; // Return null to prevent crashing
-  }
-
-  // 3. Rearrange parts into 'yyyy-mm-dd' format, which is universally understood
-  const [day, month, year] = parts;
-  const isoDateString = `${year}-${month}-${day}`;
-  
-  // 4. Now, create the date object from the safe, standardized format
-  const birthDate = new Date(isoDateString);
-  
-  // Safety check if the reformatted date is still invalid (e.g., "32.13.2023")
-  if (isNaN(birthDate.getTime())) {
-    console.error("Could not create a valid date from:", isoDateString);
-    return null;
-  }
-
-  // 5. The rest of your original logic remains the same
-  const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDiff = today.getMonth() - birthDate.getMonth();
-
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
-  }
-  
-  return age;
-};
-
-
 export default function Mobile() {
-  
-  
-  // === 1. DATA FETCHING LOGIC ===
-  // State to hold the user data and loading status
-  const [userData, setUserData] = useState<any>(null); // Use a proper type/interface in a real app
+  const { t } = useTranslation();
+  const { token } = useParams<{ token: string }>();
+  const [userData, setUserData] = useState<DecryptResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Pull route params at top-level of component (hooks must not be called inside nested functions)
-  const { token } = useParams<{ token: string }>();
-
-  useEffect(() => {
-    console.log(userData)
-  },[userData])
-  // useEffect simulates fetching data once when the component mounts
   useEffect(() => {
     const fetchData = async () => {
-      // token is available from outer scope
       try {
-        const decryptResponse = await fetch('https://iteracja-hackathon-1110.onrender.com/decryptToken', {
+        const decryptResponse = await fetch(apiUrl('/decryptToken'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ encrypted_token: token }),
         });
-        if (!decryptResponse.ok) throw new Error("Nie udało się odszyfrować danych.");
-        const decryptedData = await decryptResponse.json();
+        if (!decryptResponse.ok) throw new Error(t('errors.decryptFailed'));
+        const decryptedData: DecryptResponse = await decryptResponse.json();
         setUserData(decryptedData);
-        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
+  }, [token, t]);
 
-    // Simulating a network request with a timeout
-    const timer = setTimeout(() => {
-      // setUserData({
-      //   name: "Jan Kowalski",
-      //   age: 26,
-      //   gender: "M",
-      //   bloodType: "A Rh+",
-      //   chronicDiseases: ["Astma", "Cukrzyca typu 1", "Nadciśnienie", "Choroba serca", "Wada wzroku"],
-      //   permanentMedications: ["Insulina", "Salbutamol", "Metformina", "Aspiryna"],
-      //   allergies: ["Penicylina", "Orzeszki ziemne", "Pyłki traw", "Sierść kota", "Lateks"]
-      // });
-      setIsLoading(false);
-    }, 1000); // Simulate 1 second loading time
-    
-    return () => clearTimeout(timer); // Cleanup
-  }, []); // Empty dependency array ensures this runs only once
-
-  // Show a loading spinner while fetching data
   if (isLoading || !userData) {
     return <LoadingSpinner />;
   }
 
-  
-  
-  // The rest of the component renders only after data is available
+  const profile = userData.data;
+  const age = calculateAge(profile.birthdate);
+  const ageLabel = age === null ? t('common.noDataShort') : t('mobile.age', { count: age });
+
   return (
     <div className="h-screen bg-background-primary text-text-primary font-roboto flex flex-col">
-      
-      {/* === 2. THE INFO BAR IS NOW DIRECTLY IN THIS FILE === */}
-      {/* This header is sticky, has a solid background, and a z-index to stay on top */}
+
+      {/* Sticky person-info header */}
       <header className="sticky top-0 z-10 bg-background-primary p-4">
         <div className="max-w-md mx-auto p-4 bg-blue-300 rounded-xl border border-border-primary">
-          <h2 className="text-sm font-semibold text-text-inverted mb-3">INFORMACJE O OSOBIE</h2>
+          <h2 className="text-sm font-semibold text-text-inverted mb-3">{t('mobile.personInfo')}</h2>
           <div className="flex items-center gap-4">
-            <div className="bg-accent-primary-hover text-text-inverted text-sm font-bold p-2 rounded-lg">{formatAge(calculateAge(userData.data.birthdate))}</div>
-            <div className="bg-accent-primary-hover text-text-inverted text-sm font-bold p-2 rounded-lg">{userData.data.gender}</div>
+            <div className="bg-accent-primary-hover text-text-inverted text-sm font-bold p-2 rounded-lg">{ageLabel}</div>
+            <div className="bg-accent-primary-hover text-text-inverted text-sm font-bold p-2 rounded-lg">{profile.gender}</div>
             <div className="flex flex-1 items-center justify-between text-lg font-medium text-text-primary border-b border-border-primary pb-1 uppercase">
-              <span className="flex-1 text-center text-text-inverted">{userData.data.name}</span>
+              <span className="flex-1 text-center text-text-inverted">{profile.name}</span>
               <div className="flex items-center gap-1">
                 <MdBloodtype className="text-accent-primary-hover text-3xl" />
-                <span className='text-text-inverted'>{userData.data.bloodType}</span>
+                <span className='text-text-inverted'>{profile.bloodType}</span>
               </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* === 3. THE SCROLLABLE CONTENT AREA (UNCHANGED) === */}
+      {/* Scrollable content area */}
       <main className="flex-1 overflow-y-auto scroll-fade [scrollbar-gutter:stable]">
         <div className="max-w-md mx-auto space-y-4 p-4 pb-30">
-          <CollapsibleSection title="CHOROBY PRZEWLEKŁE">
+          <CollapsibleSection title={t('mobile.chronicDiseases')}>
             <ul className="list-disc list-inside space-y-2">
-                {(Array.isArray(userData.data.chronicDiseases) && userData.data.chronicDiseases.length > 0) 
-                  ? userData.data.chronicDiseases.map((disease: string) => <li key={disease}>{disease}</li>) 
-                  : <li className="list-none text-text-secondary">Brak danych</li>
+                {(Array.isArray(profile.chronicDiseases) && profile.chronicDiseases.length > 0)
+                  ? profile.chronicDiseases.map((disease: string) => <li key={disease}>{disease}</li>)
+                  : <li className="list-none text-text-secondary">{t('common.noDataShort')}</li>
                 }
             </ul>
           </CollapsibleSection>
 
-          <CollapsibleSection title="LEKI PRZYJMOWANE NA STAŁE">
+          <CollapsibleSection title={t('mobile.medications')}>
             <ul className="list-disc list-inside space-y-2">
-                {(Array.isArray(userData.data.permanentMedications) && userData.data.permanentMedications.length > 0)
-                  ? userData.data.permanentMedications.map((med: string) => <li key={med} >{med}</li>)
-                  : <li className="list-none text-text-secondary">Brak danych</li>
+                {(Array.isArray(profile.permanentMedications) && profile.permanentMedications.length > 0)
+                  ? profile.permanentMedications.map((med: string) => <li key={med}>{med}</li>)
+                  : <li className="list-none text-text-secondary">{t('common.noDataShort')}</li>
                 }
             </ul>
           </CollapsibleSection>
 
-          <CollapsibleSection title="ALERGIE">
+          <CollapsibleSection title={t('mobile.allergies')}>
             <ul className="list-disc list-inside space-y-2">
-                {(Array.isArray(userData.data.allergies) && userData.data.allergies.length > 0)
-                  ? userData.data.allergies.map((allergy: string) => <li key={allergy}>{allergy}</li>)
-                  : <li className="list-none text-text-secondary">Brak danych</li>
+                {(Array.isArray(profile.allergies) && profile.allergies.length > 0)
+                  ? profile.allergies.map((allergy: string) => <li key={allergy}>{allergy}</li>)
+                  : <li className="list-none text-text-secondary">{t('common.noDataShort')}</li>
                 }
             </ul>
           </CollapsibleSection>
         </div>
       </main>
-      
+
       <ActionButtons />
     </div>
   );
-};
+}

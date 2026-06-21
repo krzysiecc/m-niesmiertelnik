@@ -1,5 +1,6 @@
 // App.tsx
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
 
 // Page Imports
@@ -18,10 +19,11 @@ import Medications from "./pages/Medications";
 import Allergies from "./pages/Allergies";
 
 // Layout, Auth, and Data Provider Imports
-import { ResponsiveLayout } from "./components/layout/ResponseLayout";
+import { ResponsiveLayout } from "./components/layout/ResponsiveLayout";
 import { OnboardingLayout } from "./components/layout/OnboardingLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { ProfileDataProvider } from "./context/ProfileDataContext"; // Import the data provider
+import { ThemedToaster } from "./components/ThemedToaster";
 
 // Wrapper that allows using ProfileDataProvider as a Route element
 const ProfileDataWrapper = () => (
@@ -31,17 +33,21 @@ const ProfileDataWrapper = () => (
 );
 
 // Placeholder component (still useful for pages not yet built)
-const PlaceholderPage = ({ title }: { title: string }) => (
-  <div className="bg-background-secondary p-8 rounded-xl border border-border-primary">
-    <h1 className="text-2xl font-bold text-text-primary">{title}</h1>
-    <p className="text-text-secondary mt-2">This is a placeholder page content.</p>
-  </div>
-);
+const PlaceholderPage = ({ titleKey }: { titleKey: string }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="bg-background-secondary p-8 rounded-xl border border-border-primary">
+      <h1 className="text-2xl font-bold text-text-primary">{t(titleKey)}</h1>
+      <p className="text-text-secondary mt-2">This is a placeholder page content.</p>
+    </div>
+  );
+};
 
 function App() {
   useSmoothScroll();
 
   return (
+    <>
     <Routes>
       {/* --- Group 1: Public Routes (No Layout or Protection) --- */}
       <Route path="/" element={<Landing />} />
@@ -73,7 +79,7 @@ function App() {
             <Route path="/dashboard/health/allergies" element={<Allergies />} />
             
             <Route path="/dashboard/products" element={<Navigate to="/dashboard/products/nfc" replace />} />
-            <Route path="/dashboard/products/nfc" element={<PlaceholderPage title="Opaska ratunkowa NFC" />} />
+            <Route path="/dashboard/products/nfc" element={<PlaceholderPage titleKey="nav.nfcBand" />} />
             
             <Route path="/dashboard/settings" element={<Settings />} />
           </Route>
@@ -81,6 +87,8 @@ function App() {
         </Route>
       </Route>
     </Routes>
+    <ThemedToaster />
+    </>
   );
 }
 

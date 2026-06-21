@@ -1,0 +1,190 @@
+{
+  "common": {
+    "appName": "mNieśmiertelnik",
+    "loading": "Loading...",
+    "loadingData": "Loading data...",
+    "noData": "No data.",
+    "noDataShort": "No data",
+    "noProfileData": "No profile data.",
+    "noItems": "No items added.",
+    "notProvided": "Not provided",
+    "add": "Add",
+    "addRow": "Add row",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "backHome": "Back to home page",
+    "continueWith": "Or continue with",
+    "trustedProfile": "Profil Zaufany"
+  },
+  "language": {
+    "switch": "Change language",
+    "pl": "Polski",
+    "en": "English"
+  },
+  "nav": {
+    "panel": "Panel",
+    "myPanel": "My Panel",
+    "basicData": "BASIC DATA",
+    "healthData": "HEALTH DATA",
+    "chronicDiseases": "Chronic diseases",
+    "medications": "Medications",
+    "allergies": "Allergies",
+    "products": "PRODUCTS",
+    "nfcBand": "NFC band",
+    "settings": "SETTINGS",
+    "collapse": "Collapse",
+    "logout": "Log out"
+  },
+  "landing": {
+    "sloganWords": ["you scan", "=", "you save"],
+    "sloganHighlight": "you save",
+    "subheadlineLines": [
+      "The digital mNieśmiertelnik guaranteeing",
+      "instant access to your medical",
+      "data in emergencies."
+    ],
+    "emphasizedWords": ["mNieśmiertelnik", "instant", "access", "your", "medical", "emergencies."],
+    "register": "Sign up",
+    "login": "Log in",
+    "howItWorks": "How does it work?",
+    "steps": [
+      {
+        "title": "Create your personal profile",
+        "desc": "Enter all the information you want to share in an emergency."
+      },
+      {
+        "title": "Get your QR identifier",
+        "desc": "Generate a unique QR code for your phone or link it to an NFC band."
+      },
+      {
+        "title": "Keep your own mNieśmiertelnik with you",
+        "desc": "In a difficult situation anyone can scan the code to instantly see your info card."
+      }
+    ],
+    "epuapHeadline": "Data kept up to date thanks to full support from the ePUAP service",
+    "freeUsage": "Using mNieśmiertelnik is completely free.",
+    "freeUsageNfc": "Charges apply only after ordering an NFC identification band.",
+    "joinNow": "Join now",
+    "rightsReserved": "All rights reserved.",
+    "terms": "Terms of use",
+    "privacy": "Privacy Policy"
+  },
+  "login": {
+    "title": "Log in",
+    "noAccount": "Don't have an account?",
+    "registerLink": "Sign up",
+    "email": "Email address",
+    "password": "Password",
+    "submit": "Log in",
+    "submitting": "Logging in...",
+    "error": "Login failed. Check your email and password.",
+    "noUserId": "The server response does not contain a user ID.",
+    "epuapNotImplemented": "Logging in with ePUAP is not implemented yet."
+  },
+  "register": {
+    "title": "Create a new account",
+    "haveAccount": "Already have an account?",
+    "loginLink": "Log in",
+    "email": "Email address (login)",
+    "password": "Password (min. 8 characters)",
+    "confirmPassword": "Confirm password",
+    "submit": "Sign up",
+    "submitting": "Signing up...",
+    "passwordMismatch": "Passwords do not match!",
+    "passwordTooShort": "Password must be at least 8 characters long.",
+    "serverError": "Server error: {{status}}",
+    "success": "Registration complete! Now fill in your medical data.",
+    "noUserId": "Registration succeeded, but the server did not return a user ID. Please contact support.",
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "epuapNotImplemented": "Registration with ePUAP is not implemented yet."
+  },
+  "logout": {
+    "title": "Logged out successfully",
+    "message": "Your session has been securely ended. See you again soon!",
+    "backHome": "Back to home page",
+    "loginAgain": "Log in again"
+  },
+  "form": {
+    "title": "User details",
+    "subtitle": "Fill in your medical data",
+    "name": "Full name",
+    "namePlaceholder": "John Smith",
+    "birthDate": "Date of birth",
+    "birthDateSaved": "Saved: {{date}} (DD.MM.YYYY)",
+    "gender": "Gender",
+    "genderMale": "Male",
+    "genderFemale": "Female",
+    "genderOther": "Other / Prefer not to say",
+    "bloodType": "Blood type",
+    "bloodTypePlaceholder": "e.g. 0 Rh+",
+    "chronicDiseases": "Chronic diseases",
+    "diseaseLabel": "Condition {{index}}",
+    "diseasePlaceholder": "e.g. Type 1 diabetes",
+    "removeDisease": "Remove condition {{index}}",
+    "allergies": "Allergies",
+    "allergyLabel": "Allergy {{index}}",
+    "allergyPlaceholder": "e.g. Grass pollen",
+    "removeAllergy": "Remove allergy {{index}}",
+    "medications": "Long-term medications",
+    "medicationLabel": "Medication {{index}}",
+    "medicationPlaceholder": "e.g. Metformin",
+    "removeMedication": "Remove medication {{index}}",
+    "trustedContacts": "Trusted contacts",
+    "contactNameLabel": "Full name {{index}}",
+    "contactNamePlaceholder": "e.g. Anna Nowak",
+    "phone": "Phone",
+    "phonePlaceholder": "+48 600 000 000",
+    "removeContact": "Remove contact {{index}}",
+    "save": "Save data",
+    "saveError": "Error saving data. Please try again.",
+    "saveSuccess": "Profile updated! You can now log in."
+  },
+  "dashboard": {
+    "qrTitle": "Your QR identifier",
+    "qrHint": "Scan to see the info card.",
+    "qrHintWallpaper": "Set it as your phone wallpaper.",
+    "qrDownload": "Download PNG",
+    "noName": "No name provided",
+    "userId": "User ID: {{id}}",
+    "birthDate": "Date of birth",
+    "bloodType": "Blood type",
+    "iceTitle": "In Case of Emergency (ICE) contact",
+    "noIce": "No ICE contacts added.",
+    "regenerateQr": "Block and generate a new QR code",
+    "regenerateHint": "Use this if you lose your phone or share the code with unauthorized people.",
+    "healthChronicTitle": "Chronic diseases",
+    "healthChronicPlaceholder": "e.g. Asthma",
+    "healthMedicationsTitle": "Long-term medications",
+    "healthMedicationsPlaceholder": "e.g. Metformin 500mg",
+    "healthAllergiesTitle": "Allergies",
+    "healthAllergiesPlaceholder": "e.g. Grass pollen"
+  },
+  "mobile": {
+    "personInfo": "PERSON INFORMATION",
+    "chronicDiseases": "CHRONIC DISEASES",
+    "medications": "LONG-TERM MEDICATIONS",
+    "allergies": "ALLERGIES",
+    "notifyIce": "NOTIFY ICE",
+    "age_one": "{{count}} year",
+    "age_other": "{{count}} years"
+  },
+  "settings": {
+    "title": "Account Settings",
+    "dangerZone": "Danger Zone",
+    "deleteWarning": "Deleting your account is irreversible. All your data, including medical information and generated QR codes, will be permanently removed.",
+    "deleteButton": "Delete My Account",
+    "confirmTitle": "Are you sure?",
+    "confirmMessage": "This action is irreversible. Are you sure you want to permanently delete your account?",
+    "confirmDelete": "Yes, delete account",
+    "deleting": "Deleting...",
+    "noUserId": "Error: missing user ID.",
+    "deleteFailed": "Failed to delete the account. Please try again.",
+    "deleteSuccess": "Your account has been successfully deleted."
+  },
+  "errors": {
+    "fetchUserFailed": "Failed to fetch user data.",
+    "noToken": "The server response does not contain a token.",
+    "decryptFailed": "Failed to decrypt the data.",
+    "unexpected": "An unexpected error occurred."
+  }
+}

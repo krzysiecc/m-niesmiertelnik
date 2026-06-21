@@ -1,0 +1,36 @@
+# ---- Python (BackendPY) ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Databases (local dev)
+*.db
+*.sqlite
+*.sqlite3
+
+# ---- Environment / secrets ----
+.env
+.env.*
+!.env.example
+
+# ---- Node / frontend (frontend/ has its own too) ----
+node_modules/
+dist/
+dist-ssr/
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo

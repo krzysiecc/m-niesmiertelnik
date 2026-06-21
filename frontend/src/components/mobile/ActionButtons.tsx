@@ -1,8 +1,9 @@
-
 import { FaPhoneAlt } from 'react-icons/fa';
 import { FaUsersLine } from "react-icons/fa6";
+import { useTranslation } from 'react-i18next';
 
 export const ActionButtons = () => {
+  const { t } = useTranslation();
   return (
     <div className="fixed inset-x-0 bottom-0 bg-gradient-to-t from-background-primary to-transparent p-4">
       <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
@@ -11,7 +12,7 @@ export const ActionButtons = () => {
           className="flex flex-col items-center justify-center gap-2 p-4 bg-accent-success bg-green-600 hover:bg-green-700 text-on-accent rounded-xl text-center font-bold transition-colors"
         >
           <FaUsersLine size={24} />
-          <span>POWIADOM ICE</span>
+          <span>{t('mobile.notifyIce')}</span>
         </a>
 
         {/* A semantic link for calling 112 */}

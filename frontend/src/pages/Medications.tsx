@@ -1,11 +1,13 @@
+import { useTranslation } from 'react-i18next';
 import { useProfileData } from '../context/ProfileDataContext';
 import { HealthDataList } from '../components/dashboard/HealthDataList';
 
 export default function Medications() {
+  const { t } = useTranslation();
   const { profileData, isLoading, error } = useProfileData();
-  if (isLoading) return <div>Ładowanie...</div>;
+  if (isLoading) return <div>{t('common.loading')}</div>;
   if (error) return <div>{error}</div>;
-  if (!profileData) return <div>Brak danych.</div>;
+  if (!profileData) return <div>{t('common.noData')}</div>;
 
-  return <HealthDataList title="Leki Przyjmowane na Stałe" items={profileData.permanentMedications} placeholder="np. Metformina 500mg" />;
+  return <HealthDataList title={t('dashboard.healthMedicationsTitle')} items={profileData.permanentMedications} placeholder={t('dashboard.healthMedicationsPlaceholder')} />;
 }

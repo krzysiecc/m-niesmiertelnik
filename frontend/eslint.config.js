@@ -19,5 +19,9 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      // Allow context files to export constants (e.g. pathTitles) next to components.
+      'react-refresh/only-export-components': ['error', { allowConstantExport: true }],
+    },
   },
 ])

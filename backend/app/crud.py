@@ -1,7 +1,13 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
-from datetime import datetime, timedelta
+from datetime import datetime, timezone
+import uuid
 from .security import get_password_hash
+
+
+def _utcnow():
+    return datetime.now(timezone.utc)
+
 
 def create_user(db: Session, user: schemas.UserCreate, hashed_password: str):
     db_user = models.User(
@@ -26,16 +32,16 @@ def update_user(db: Session, login: str, user_update: schemas.UserUpdate):
     db_user = get_user_by_login(db, login)
     if not db_user:
         return None
-    
-    update_data = user_update.dict(exclude_unset=True)
-    
+
+    update_data = user_update.model_dump(exclude_unset=True)
+
     if "password" in update_data:
         update_data["hashed_password"] = get_password_hash(update_data.pop("password"))
-    
+
     for field, value in update_data.items():
         setattr(db_user, field, value)
-    
-    db_user.updated_at = datetime.utcnow()
+
+    db_user.updated_at = _utcnow()
     db.commit()
     db.refresh(db_user)
     return db_user
@@ -44,11 +50,11 @@ def delete_user(db: Session, login: str):
     db_user = get_user_by_login(db, login)
     if not db_user:
         return False
-    
-    # Usuń też stare ID i dane formularzy
+
+    # Also remove old IDs and form data.
     db.query(models.OldUserId).filter(models.OldUserId.user_login == login).delete()
     db.query(models.FormData).filter(models.FormData.user_login == login).delete()
-    
+
     db.delete(db_user)
     db.commit()
     return True
@@ -57,26 +63,26 @@ def generate_new_user_id(db: Session, login: str):
     db_user = get_user_by_login(db, login)
     if not db_user:
         return None
-    
-    # Zapisz stare ID do tabeli old_user_ids
+
+    # Save the old ID into the old_user_ids table.
     old_id_record = models.OldUserId(
         user_login=login,
         old_user_id=db_user.user_id
     )
     db.add(old_id_record)
-    
-    # Wygeneruj nowe ID
-    db_user.user_id = models.User.generate_user_id()
-    db_user.updated_at = datetime.utcnow()
-    
+
+    # Generate the new ID.
+    db_user.user_id = str(uuid.uuid4())
+    db_user.updated_at = _utcnow()
+
     db.commit()
     db.refresh(db_user)
-    
+
     return db_user
 
 def cleanup_expired_ids(db: Session):
-    """Usuwa wygasłe stare ID użytkowników"""
-    expired_threshold = datetime.utcnow()
+    """Remove expired old user IDs."""
+    expired_threshold = _utcnow()
     deleted_count = db.query(models.OldUserId).filter(
         models.OldUserId.expires_at < expired_threshold
     ).delete()

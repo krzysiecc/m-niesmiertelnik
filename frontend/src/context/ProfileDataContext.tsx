@@ -1,19 +1,14 @@
-// src/contexts/ProfileDataContext.tsx
+// src/context/ProfileDataContext.tsx
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { useAuth } from './AuthContext';
-
-// Define the shape of our data (can be moved to a types file later)
-type TrustedContact = { fullName: string; phone: string; };
-type UserProfileData = {
-  userId: string; bloodType: string; birthdate: string; name: string;
-  gender: 'M' | 'F' | 'O'; chronicDiseases: string[]; allergies: string[];
-  permanentMedications: string[]; trustedContacts: TrustedContact[]; is_blocked: boolean;
-};
+import { apiUrl, authFetch } from '../lib/api';
+import i18n from '../i18n';
+import type { UserProfileData } from '../types';
 
 interface ProfileDataContextType {
   profileData: UserProfileData | null;
-  token: string | null;             
+  token: string | null;
   isLoading: boolean;
   error: string | null;
   refetch: () => void;
@@ -24,10 +19,10 @@ const ProfileDataContext = createContext<ProfileDataContextType | undefined>(und
 export const ProfileDataProvider = ({ children }: { children: ReactNode }) => {
   const { userId } = useAuth();
   const [profileData, setProfileData] = useState<UserProfileData | null>(null);
-  const [token, setToken] = useState<string | null>(null); // ✅ 
+  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const fetchAndDecryptData = useCallback(async () => {
     if (!userId) {
       setIsLoading(false);
@@ -36,28 +31,29 @@ export const ProfileDataProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const userResponse = await fetch(`https://iteracja-hackathon-1110.onrender.com/users/${userId}`);
-      if (!userResponse.ok) throw new Error("Nie udało się pobrać danych użytkownika.");
+      // Authenticated request: only the owner may read their own record/token.
+      const userResponse = await authFetch(`/users/${userId}`);
+      if (!userResponse.ok) throw new Error(i18n.t('errors.fetchUserFailed'));
       const userData = await userResponse.json();
-      if (!userData.token) throw new Error("Odpowiedź serwera nie zawiera tokenu.");
-      
+      if (!userData.token) throw new Error(i18n.t('errors.noToken'));
+
       setToken(userData.token);
 
-      
-      const decryptResponse = await fetch('https://iteracja-hackathon-1110.onrender.com/decryptToken', {
+      // Public decrypt endpoint (the same path responders use when scanning).
+      const decryptResponse = await fetch(apiUrl('/decryptToken'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ encrypted_token: userData.token }),
       });
-      if (!decryptResponse.ok) throw new Error("Nie udało się odszyfrować danych.");
+      if (!decryptResponse.ok) throw new Error(i18n.t('errors.decryptFailed'));
       const result = await decryptResponse.json();
       setProfileData(result.data);
-    } catch (err: any) {
-      setError(err.message || "Wystąpił nieoczekiwany błąd.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : i18n.t('errors.unexpected'));
     } finally {
       setIsLoading(false);
     }
-   }, [userId]); 
+  }, [userId]);
 
   useEffect(() => {
     fetchAndDecryptData();
@@ -70,6 +66,8 @@ export const ProfileDataProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// Custom hook co-located with its provider.
+// eslint-disable-next-line react-refresh/only-export-components
 export const useProfileData = (): ProfileDataContextType => {
   const context = useContext(ProfileDataContext);
   if (!context) {
